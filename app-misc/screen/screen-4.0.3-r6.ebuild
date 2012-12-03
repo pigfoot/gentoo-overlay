@@ -11,7 +11,7 @@ inherit eutils flag-o-matic toolchain-funcs pam autotools user
 DESCRIPTION="Full-screen window manager that multiplexes physical terminals between several processes"
 HOMEPAGE="http://www.gnu.org/software/screen/"
 SRC_URI="ftp://ftp.uni-erlangen.de/pub/utilities/${PN}/${P}.tar.gz
-		cjk? ( http://git.overlays.gentoo.org/gitweb/?p=user/pigfoot.git;a=blob_plain;f=distfiles/screen-4.0.3-uao-patch.tar.bz2;hb=HEAD )"
+		cjk? ( http://git.overlays.gentoo.org/gitweb/?p=user/pigfoot.git;a=blob_plain;hb=HEAD;f=distfiles/screen-4.0.3-uao-patch.tar.bz2 )"
 
 LICENSE="GPL-2"
 SLOT="0"

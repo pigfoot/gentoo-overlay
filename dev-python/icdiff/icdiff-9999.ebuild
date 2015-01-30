@@ -18,8 +18,6 @@ HOMEPAGE="http://www.jefftk.com/icdiff"
 LICENSE=""
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-
-DEPEND="dev-python/python-distutils-extra"
 RDEPEND="${DEPEND}"
 
 src_compile(){

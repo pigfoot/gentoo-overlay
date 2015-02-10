@@ -21,7 +21,7 @@ S="${WORKDIR}"
 pkg_setup() {
 	local btsyncuser="btsync"
 	enewgroup ${btsyncuser}
-	enewuser btsync -1 -1 /var/lib/${PN} ${btsyncuser}
+	enewuser btsync -1 -1 /var/lib/${NAME} ${btsyncuser}
 }
 
 src_install() {

@@ -7,8 +7,10 @@ NAME="BitTorrent Sync"
 SYNC_NAME="btsync"
 SYNC_PATH="/opt/${SYNC_NAME}/"
 SYNC_BINARY="${SYNC_PATH}/${SYNC_NAME}"
-SYNC_OPTS="--nodaemon --config /etc/${SYNC_NAME}/config"
+SYNC_OPTS="--nodaemon --config /etc/${SYNC_NAME}/btsync.conf"
 SYNC_PIDFILE="/var/run/${SYNC_NAME}.pid"
+SYNC_USER=${SYNC_USER:-btsync}
+SYNC_GROUP=${SYNC_GROUP:-btsync}
 
 start() {
 	ebegin "Starting ${NAME}"
@@ -17,6 +19,7 @@ start() {
 	# with group write permissions
 	start-stop-daemon --start --exec "${SYNC_BINARY}" \
 	   --pidfile "${SYNC_PIDFILE}" --background \
+	   --user "${SYNC_USER}" --group "${SYNC_GROUP}" \
 	   -- ${SYNC_OPTS}
 
 	eend $?

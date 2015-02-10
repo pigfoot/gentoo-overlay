@@ -6,7 +6,7 @@ inherit user systemd
 
 NAME="btsync"
 DESCRIPTION="Fast, unlimited and secure file-syncing. Free from the cloud."
-HOMEPAGE="http://labs.bittorrent.com/experiments/sync.html"
+HOMEPAGE="http://www.getsync.com/"
 SRC_URI="
 	amd64?	( http://syncapp.bittorrent.com/${PV}/btsync_x64-${PV}.tar.gz )
 	x86? ( http://syncapp.bittorrent.com/${PV}/btsync_i386-${PV}.tar.gz )"
@@ -16,9 +16,13 @@ LICENSE="BitTorrent"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-QA_PREBUILT="opt/btsync/btsync"
-
 S="${WORKDIR}"
+
+pkg_setup() {
+	local btsyncuser="btsync"
+	enewgroup ${btsyncuser}
+	enewuser btsync -1 -1 /var/lib/${PN} ${btsyncuser}
+}
 
 src_install() {
 	# Install the executable
@@ -27,35 +31,21 @@ src_install() {
 
 	# Install a default configuration file
 	insinto "/etc/${NAME}"
-	doins "${FILESDIR}/config"
+	newins "${FILESDIR}/btsync.conf" "${NAME}.conf"
 
 	# Install the OpenRC init file
 	doinitd "${FILESDIR}/init.d/${NAME}"
 
 	# Install the systemd unit file
 	systemd_dounit "${FILESDIR}/systemd/${NAME}.service"
+
+	for x in /var/{lib,log}/${PN}; do
+		keepdir "${x}"
+		fowners btsync:btsync "${x}"
+	done
 }
 
 pkg_postinst() {
-	local syncuser="btsync"
-	local syncdir="/home/${syncuser}"
-
-	# Let's set up the user and group for this daemon so that members of the group
-	# can have write permissions.
-	enewgroup "${syncuser}"
-	enewuser "${syncuser}" -1 /bin/bash "${syncdir}" "${syncuser}"
-
-	if [[ ! -d "${syncdir}" ]]; then
-		# Create the .sync directory where sync metadata will be stored
-		mkdir "${syncdir}/.sync"
-
-		# Fixed home directory group permissions since it's currently btsync:root
-		chown ${syncuser}:${syncuser} "${syncdir}"
-
-		# Fix .sync directory ownership
-		chown ${syncuser}:${syncuser} "${syncdir}/.sync"
-	fi
-
 	elog "In order for shared files between local users to be as easy as possible,"
 	elog "please set up ACLs on your system."
 	elog ""

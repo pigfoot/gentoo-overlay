@@ -39,7 +39,7 @@ src_install() {
 	# Install the systemd unit file
 	systemd_dounit "${FILESDIR}/systemd/${NAME}.service"
 
-	for x in /var/lib/${NAME}; do
+	for x in /var/{lib,run}/${NAME}; do
 		keepdir "${x}"
 		fowners btsync:btsync "${x}"
 	done

@@ -8,7 +8,7 @@ SYNC_NAME="btsync"
 SYNC_PATH="/opt/${SYNC_NAME}/"
 SYNC_BINARY="${SYNC_PATH}/${SYNC_NAME}"
 SYNC_OPTS="--nodaemon --config /etc/${SYNC_NAME}/btsync.conf"
-SYNC_PIDFILE="/var/run/${SYNC_NAME}.pid"
+SYNC_PIDFILE="/var/run/${SYNC_NAME}/${SYNC_NAME}.pid"
 SYNC_USER=${SYNC_USER:-btsync}
 SYNC_GROUP=${SYNC_GROUP:-btsync}
 

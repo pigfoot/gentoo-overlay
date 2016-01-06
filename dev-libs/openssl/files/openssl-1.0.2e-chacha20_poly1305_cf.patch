@@ -88,7 +88,37 @@ index d99eed7..1a7f5f3 100755
  
  # As for $BSDthreads. Idea is to maintain "collective" set of flags,
  # which would cover all BSD flavors. -pthread applies to them all, 
-@@ -706,6 +706,7 @@ my $idx_wp_obj = $idx++;
+@@ -213,7 +213,7 @@
+ "debug-linux-ppro","gcc:-DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DBN_CTX_DEBUG -DCRYPTO_MDEBUG -DL_ENDIAN -g -mcpu=pentiumpro -Wall::-D_REENTRANT::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn",
+ "debug-linux-elf","gcc:-DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DBN_CTX_DEBUG -DCRYPTO_MDEBUG -DL_ENDIAN -g -march=i486 -Wall::-D_REENTRANT::-lefence -ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ "debug-linux-elf-noefence","gcc:-DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DBN_CTX_DEBUG -DCRYPTO_MDEBUG -DL_ENDIAN -g -march=i486 -Wall::-D_REENTRANT::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"debug-linux-ia32-aes", "gcc:-DAES_EXPERIMENTAL -DL_ENDIAN -O3 -fomit-frame-pointer -Wall::-D_REENTRANT::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:x86cpuid.o:bn-586.o co-586.o x86-mont.o::des-586.o crypt586.o:aes_x86core.o aes_cbc.o aesni-x86.o:bf-586.o:md5-586.o:sha1-586.o sha256-586.o sha512-586.o:cast-586.o:rc4-586.o:rmd-586.o:rc5-586.o:wp_block.o wp-mmx.o::ghash-x86.o::elf:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
++"debug-linux-ia32-aes", "gcc:-DAES_EXPERIMENTAL -DL_ENDIAN -O3 -fomit-frame-pointer -Wall::-D_REENTRANT::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:x86cpuid.o:bn-586.o co-586.o x86-mont.o::des-586.o crypt586.o:aes_x86core.o aes_cbc.o aesni-x86.o:bf-586.o:md5-586.o:sha1-586.o sha256-586.o sha512-586.o:cast-586.o:rc4-586.o:rmd-586.o:rc5-586.o:wp_block.o wp-mmx.o::ghash-x86.o:::elf:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ "debug-linux-generic32","gcc:-DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DCRYPTO_MDEBUG -g -Wall::-D_REENTRANT::-ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_INT DES_UNROLL BF_PTR:${no_asm}:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ "debug-linux-generic64","gcc:-DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DCRYPTO_MDEBUG -DTERMIO -g -Wall::-D_REENTRANT::-ldl:SIXTY_FOUR_BIT_LONG RC4_CHAR RC4_CHUNK DES_INT DES_UNROLL BF_PTR:${no_asm}:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ "debug-linux-x86_64","gcc:-DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DCRYPTO_MDEBUG -m64 -DL_ENDIAN -g -Wall::-D_REENTRANT::-ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_UNROLL:${x86_64_asm}:elf:dlfcn:linux-shared:-fPIC:-m64:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):::64",
+@@ -320,7 +320,7 @@ my %table=($
+ "hpux-parisc-gcc","gcc:-O3 -DB_ENDIAN -DBN_DIV2W::-D_REENTRANT::-Wl,+s -ldld:BN_LLONG DES_PTR DES_UNROLL DES_RISC1:${no_asm}:dl:hpux-shared:-fPIC:-shared:.sl.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ "hpux-parisc1_1-gcc","gcc:-O3 -DB_ENDIAN -DBN_DIV2W::-D_REENTRANT::-Wl,+s -ldld:BN_LLONG DES_PTR DES_UNROLL DES_RISC1:${parisc11_asm}:dl:hpux-shared:-fPIC:-shared:.sl.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):::/pa1.1",
+ "hpux-parisc2-gcc","gcc:-march=2.0 -O3 -DB_ENDIAN -D_REENTRANT::::-Wl,+s -ldld:SIXTY_FOUR_BIT RC4_CHAR RC4_CHUNK DES_PTR DES_UNROLL DES_RISC1:".eval{my $asm=$parisc20_asm;$asm=~s/2W\./2\./;$asm=~s/:64/:32/;$asm}.":dl:hpux-shared:-fPIC:-shared:.sl.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):::/pa20_32",
+-"hpux64-parisc2-gcc","gcc:-O3 -DB_ENDIAN -D_REENTRANT::::-ldl:SIXTY_FOUR_BIT_LONG MD2_CHAR RC4_INDEX RC4_CHAR DES_UNROLL DES_RISC1 DES_INT::pa-risc2W.o:::::::::::::::void:dlfcn:hpux-shared:-fpic:-shared:.sl.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):::/pa20_64",
++"hpux64-parisc2-gcc","gcc:-O3 -DB_ENDIAN -D_REENTRANT::::-ldl:SIXTY_FOUR_BIT_LONG MD2_CHAR RC4_INDEX RC4_CHAR DES_UNROLL DES_RISC1 DES_INT::pa-risc2W.o::::::::::::::::void:dlfcn:hpux-shared:-fpic:-shared:.sl.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):::/pa20_64",
+
+ # More attempts at unified 10.X and 11.X targets for HP C compiler.
+ #
+@@ -577,9 +577,9 @@ my %table=(
+ # Visual C targets
+ #
+ # Win64 targets, WIN64I denotes IA-64 and WIN64A - AMD64
+-"VC-WIN64I","cl:-W3 -Gs0 -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE:::WIN64I::SIXTY_FOUR_BIT RC4_CHUNK_LL DES_INT EXPORT_VAR_AS_FN:ia64cpuid.o:ia64.o ia64-mont.o:::aes_core.o aes_cbc.o aes-ia64.o::md5-ia64.o:sha1-ia64.o sha256-ia64.o sha512-ia64.o:::::::ghash-ia64.o::ias:win32",
++"VC-WIN64I","cl:-W3 -Gs0 -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE:::WIN64I::SIXTY_FOUR_BIT RC4_CHUNK_LL DES_INT EXPORT_VAR_AS_FN:ia64cpuid.o:ia64.o ia64-mont.o:::aes_core.o aes_cbc.o aes-ia64.o::md5-ia64.o:sha1-ia64.o sha256-ia64.o sha512-ia64.o:::::::ghash-ia64.o:::ias:win32",
+ "VC-WIN64A","cl:-W3 -Gs0 -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE:::WIN64A::SIXTY_FOUR_BIT RC4_CHUNK_LL DES_INT EXPORT_VAR_AS_FN:".eval{my $asm=$x86_64_asm;$asm=~s/x86_64-gcc\.o/bn_asm.o/;$asm}.":auto:win32",
+-"debug-VC-WIN64I","cl:-W3 -Gs0 -Gy -Zi -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE:::WIN64I::SIXTY_FOUR_BIT RC4_CHUNK_LL DES_INT EXPORT_VAR_AS_FN:ia64cpuid.o:ia64.o:::aes_core.o aes_cbc.o aes-ia64.o::md5-ia64.o:sha1-ia64.o sha256-ia64.o sha512-ia64.o:::::::ghash-ia64.o::ias:win32",
++"debug-VC-WIN64I","cl:-W3 -Gs0 -Gy -Zi -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE:::WIN64I::SIXTY_FOUR_BIT RC4_CHUNK_LL DES_INT EXPORT_VAR_AS_FN:ia64cpuid.o:ia64.o:::aes_core.o aes_cbc.o aes-ia64.o::md5-ia64.o:sha1-ia64.o sha256-ia64.o sha512-ia64.o:::::::ghash-ia64.o:::ias:win32",
+ "debug-VC-WIN64A","cl:-W3 -Gs0 -Gy -Zi -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE:::WIN64A::SIXTY_FOUR_BIT RC4_CHUNK_LL DES_INT EXPORT_VAR_AS_FN:".eval{my $asm=$x86_64_asm;$asm=~s/x86_64-gcc\.o/bn_asm.o/;$asm}.":auto:win32",
+ # x86 Win32 target defaults to ANSI API, if you want UNICODE, complement
+ # 'perl Configure VC-WIN32' with '-DUNICODE -D_UNICODE'
+@@ -707,6 +707,7 @@ my $idx_wp_obj = $idx++;
  my $idx_cmll_obj = $idx++;
  my $idx_modes_obj = $idx++;
  my $idx_engines_obj = $idx++;
@@ -96,7 +126,7 @@ index d99eed7..1a7f5f3 100755
  my $idx_perlasm_scheme = $idx++;
  my $idx_dso_scheme = $idx++;
  my $idx_shared_target = $idx++;
-@@ -748,6 +749,7 @@ my $bf	="crypto/bf/bf_locl.h";
+@@ -749,6 +750,7 @@ my $bf	="crypto/bf/bf_locl.h";
  my $bn_asm	="bn_asm.o";
  my $des_enc="des_enc.o fcrypt_b.o";
  my $aes_enc="aes_core.o aes_cbc.o";
@@ -104,7 +134,7 @@ index d99eed7..1a7f5f3 100755
  my $bf_enc	="bf_enc.o";
  my $cast_enc="c_enc.o";
  my $rc4_enc="rc4_enc.o rc4_skey.o";
-@@ -1206,7 +1208,7 @@ $openssldir=$prefix . "/" . $openssldir if $openssldir !~ /(^\/|^[a-zA-Z]:[\\\/]
+@@ -1207,7 +1209,7 @@ $openssldir=$prefix . "/" . $openssldir if $openssldir !~ /(^\/|^[a-zA-Z]:[\\\/]
  
  print "IsMK1MF=$IsMK1MF\n";
  
@@ -113,7 +143,7 @@ index d99eed7..1a7f5f3 100755
  my $cc = $fields[$idx_cc];
  # Allow environment CC to override compiler...
  if($ENV{CC}) {
-@@ -1235,6 +1237,7 @@ my $wp_obj = $fields[$idx_wp_obj];
+@@ -1236,6 +1238,7 @@ my $wp_obj = $fields[$idx_wp_obj];
  my $cmll_obj = $fields[$idx_cmll_obj];
  my $modes_obj = $fields[$idx_modes_obj];
  my $engines_obj = $fields[$idx_engines_obj];
@@ -121,7 +151,7 @@ index d99eed7..1a7f5f3 100755
  my $perlasm_scheme = $fields[$idx_perlasm_scheme];
  my $dso_scheme = $fields[$idx_dso_scheme];
  my $shared_target = $fields[$idx_shared_target];
-@@ -1401,7 +1404,7 @@ if ($no_asm)
+@@ -1403,7 +1406,7 @@ if ($no_asm)
  	{
  	$cpuid_obj=$bn_obj=$ec_obj=
  	$des_obj=$aes_obj=$bf_obj=$cast_obj=$rc4_obj=$rc5_obj=$cmll_obj=
@@ -130,7 +160,7 @@ index d99eed7..1a7f5f3 100755
  	}
  
  if (!$no_shared)
-@@ -1554,6 +1557,14 @@ $bf_obj=$bf_enc		unless ($bf_obj =~ /\.o$/);
+@@ -1556,6 +1559,14 @@ $bf_obj=$bf_enc		unless ($bf_obj =~ /\.o$/);
  $cast_obj=$cast_enc	unless ($cast_obj =~ /\.o$/);
  $rc4_obj=$rc4_enc	unless ($rc4_obj =~ /\.o$/);
  $rc5_obj=$rc5_enc	unless ($rc5_obj =~ /\.o$/);
@@ -145,7 +175,7 @@ index d99eed7..1a7f5f3 100755
  if ($sha1_obj =~ /\.o$/)
  	{
  #	$sha1_obj=$sha1_enc;
-@@ -1733,7 +1744,8 @@ while (<IN>)
+@@ -1740,6 +1751,7 @@ while (<IN>)
  	s/^RMD160_ASM_OBJ=.*$/RMD160_ASM_OBJ= $rmd160_obj/;
  	s/^WP_ASM_OBJ=.*$/WP_ASM_OBJ= $wp_obj/;
  	s/^CMLL_ENC=.*$/CMLL_ENC= $cmll_obj/;
@@ -155,7 +185,7 @@ index d99eed7..1a7f5f3 100755
  	s/^ENGINES_ASM_OBJ.=*$/ENGINES_ASM_OBJ= $engines_obj/;
  	s/^PERLASM_SCHEME=.*$/PERLASM_SCHEME= $perlasm_scheme/;
  	s/^PROCESSOR=.*/PROCESSOR= $processor/;
-@@ -1796,6 +1808,7 @@ print "RMD160_OBJ_ASM=$rmd160_obj\n";
+@@ -1802,6 +1814,7 @@ print "RMD160_OBJ_ASM=$rmd160_obj\n";
  print "CMLL_ENC      =$cmll_obj\n";
  print "MODES_OBJ     =$modes_obj\n";
  print "ENGINES_OBJ   =$engines_obj\n";
@@ -163,7 +193,7 @@ index d99eed7..1a7f5f3 100755
  print "PROCESSOR     =$processor\n";
  print "RANLIB        =$ranlib\n";
  print "ARFLAGS       =$arflags\n";
-@@ -2194,7 +2207,7 @@ sub print_table_entry
+@@ -2200,7 +2213,7 @@ sub print_table_entry
  	my ($cc, $cflags, $unistd, $thread_cflag, $sys_id, $lflags,
  	    $bn_ops, $cpuid_obj, $bn_obj, $ec_obj, $des_obj, $aes_obj, $bf_obj,
  	    $md5_obj, $sha1_obj, $cast_obj, $rc4_obj, $rmd160_obj,
@@ -172,7 +202,7 @@ index d99eed7..1a7f5f3 100755
  	    $perlasm_scheme, $dso_scheme, $shared_target, $shared_cflag,
  	    $shared_ldflag, $shared_extension, $ranlib, $arflags, $multilib)=
  	split(/\s*:\s*/,$table{$target} . ":" x 30 , -1);
-@@ -2225,6 +2238,7 @@ sub print_table_entry
+@@ -2231,6 +2244,7 @@ sub print_table_entry
  \$cmll_obj     = $cmll_obj
  \$modes_obj    = $modes_obj
  \$engines_obj  = $engines_obj

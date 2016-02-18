@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=5
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 pypy )
 inherit distutils-r1
 
 if [[ ${PV} == "9999" ]] ; then
@@ -21,11 +21,3 @@ KEYWORDS="~x86 ~amd64"
 RDEPEND="dev-python/oauth[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]"
-
-src_compile(){
-	esetup.py build || die
-}
-
-src_install(){
-	esetup.py install --root="${D}" || die
-}

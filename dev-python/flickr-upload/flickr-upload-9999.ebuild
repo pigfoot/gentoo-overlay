@@ -1,10 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=5
-
-inherit eutils
+PYTHON_COMPAT=( python2_7 )
+inherit distutils-r1
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/beaufour/${PN}.git
@@ -18,12 +18,14 @@ HOMEPAGE="https://github.com/beaufour/flickr-upload"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-RDEPEND="${DEPEND}"
+RDEPEND="dev-python/flickr-api[${PYTHON_USEDEP}]"
+DEPEND="${RDEPEND}
+	dev-python/setuptools[${PYTHON_USEDEP}]"
 
 src_compile(){
-	python setup.py build || die
+	esetup.py build || die
 }
 
 src_install(){
-	 python setup.py install --root="${D}" || die
+	esetup.py install --root="${D}" || die
 }

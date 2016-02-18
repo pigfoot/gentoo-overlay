@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=5
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 pypy )
 inherit distutils-r1
 
 if [[ ${PV} == "9999" ]] ; then
@@ -18,14 +18,7 @@ HOMEPAGE="https://github.com/beaufour/flickr-upload"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-RDEPEND="dev-python/flickr-api[${PYTHON_USEDEP}]"
+RDEPEND="dev-python/flickr-api[${PYTHON_USEDEP}]
+	     dev-python/phpserialize[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]"
-
-src_compile(){
-	esetup.py build || die
-}
-
-src_install(){
-	esetup.py install --root="${D}" || die
-}

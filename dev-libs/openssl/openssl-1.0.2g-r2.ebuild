@@ -70,7 +70,8 @@ src_prepare() {
 	fi
 
 	if use chacha20_poly1305 ; then
-		epatch "${FILESDIR}"/${PN}-1.0.2e-chacha20_poly1305_cf.patch
+		epatch "${FILESDIR}"/${PN}-1.0.2g-chacha20_poly1305_draft_and_rfc_ossl102g.patch
+		epatch "${FILESDIR}"/${PN}-1.0.2g-chacha20_poly1305_draft_and_rfc_ossl102g-gentoo.patch
 	fi
 
 	# disable fips in the build

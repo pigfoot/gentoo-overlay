@@ -36,7 +36,8 @@ src_prepare() {
 		"${FILESDIR}"/${P}-DLT_LINUX_SLL.patch \
 		"${FILESDIR}"/${P}-prefix-fix.patch \
 		"${FILESDIR}"/${P}-declaration.patch \
-		"${FILESDIR}"/${P}-includes.patch
+		"${FILESDIR}"/${P}-includes.patch \
+		"${FILESDIR}"/${P}-tls12.patch
 
 	autotools-utils_src_prepare
 }

@@ -7,7 +7,7 @@ EAPI=6
 PYTHON_COMPAT=( python{2_7,3_{3,4,5}} )
 
 EGIT_REPO_URI="https://github.com/pigfoot/CapTipper.git"
-EGIT_BRANCH="pf-branch"
+EGIT_BRANCH="pf-patch"
 inherit git-r3 distutils-r1
 
 DESCRIPTION="Malicious HTTP traffic explorer"

@@ -19,11 +19,14 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-DEPEND="
+RDEPEND="
+    dev-python/boto[${PYTHON_USEDEP}]
+"
+
+DEPEND="${RDEPEND}
     dev-python/setuptools[${PYTHON_USEDEP}]
 "
 
-RDEPEND="${DEPEND}"
 
 python_install_all() {
 	for _s in google-accounts-daemon \

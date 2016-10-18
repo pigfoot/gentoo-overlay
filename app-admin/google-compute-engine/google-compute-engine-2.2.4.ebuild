@@ -20,7 +20,7 @@ IUSE=""
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
-    dev-python/boto[${PYTHON_USEDEP}]
+    dev-python/boto3[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}

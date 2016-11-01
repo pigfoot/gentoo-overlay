@@ -7,9 +7,8 @@ EAPI=6
 DESCRIPTION="Scalable, Portable and Distributed Gradient Boosting."
 HOMEPAGE="https://github.com/dmlc/xgboost"
 
-if [[ ${PV} == "9999" ]] ; then
+if [[ ${PV} == *9999* ]] ; then
 	EGIT_REPO_URI="git://github.com/dmlc/xgboost.git"
-	KEYWORDS=""
 	inherit git-r3
 else
     EGIT_COMMIT=v${PV}

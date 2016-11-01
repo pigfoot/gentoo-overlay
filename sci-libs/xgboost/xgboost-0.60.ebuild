@@ -19,7 +19,15 @@ fi
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
+IUSE="static-libs"
 
 DEPEND=">=sys-devel/gcc-4.6"
 RDEPEND="${DEPEND}"
+
+src_install() {
+    insinto /usr/include
+    doins -r {dmlc-core/,rabit/,}include/*
+    dolib.so lib/libxgboost.so
+    use static-libs && dolib.a lib/libxgboost.a
+    dobin xgboost
+}

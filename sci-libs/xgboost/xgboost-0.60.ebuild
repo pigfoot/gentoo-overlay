@@ -4,7 +4,8 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{3,4,5} pypy )
+PYTHON_COMPAT=( python{2_7,3_{4,5}} pypy{,3} )
+
 inherit distutils-r1
 
 DESCRIPTION="Scalable, Portable and Distributed Gradient Boosting."

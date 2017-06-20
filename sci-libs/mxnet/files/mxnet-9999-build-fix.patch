@@ -1,0 +1,13 @@
+diff --git a/cmake/Modules/FindOpenBLAS.cmake.BAK b/cmake/Modules/FindOpenBLAS.cmake
+index b63817a2..71da4d42 100644
+--- a/cmake/Modules/FindOpenBLAS.cmake.BAK
++++ b/cmake/Modules/FindOpenBLAS.cmake
+@@ -39,7 +39,7 @@ SET(Open_BLAS_LIB_SEARCH_PATHS
+  )
+ 
+ FIND_PATH(OpenBLAS_INCLUDE_DIR NAMES cblas.h PATHS ${Open_BLAS_INCLUDE_SEARCH_PATHS})
+-FIND_LIBRARY(OpenBLAS_LIB NAMES openblas PATHS ${Open_BLAS_LIB_SEARCH_PATHS})
++FIND_LIBRARY(OpenBLAS_LIB NAMES openblas openblas_threads PATHS ${Open_BLAS_LIB_SEARCH_PATHS})
+ IF(NOT OpenBLAS_LIB)
+ 	FIND_FILE(OpenBLAS_LIB NAMES libopenblas.dll.a PATHS ${Open_BLAS_LIB_SEARCH_PATHS})
+ ENDIF()

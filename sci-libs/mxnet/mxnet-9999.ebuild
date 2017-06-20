@@ -14,7 +14,7 @@ EGIT_REPO_URI="https://github.com/dmlc/mxnet"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="-* ~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="cuda distributed opencv openmp python +mxnet_blas_mkl mxnet_blas_openblas mxnet_blas_atlas"
 
 RDEPEND="

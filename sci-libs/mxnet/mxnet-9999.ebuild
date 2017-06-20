@@ -19,7 +19,7 @@ IUSE="cuda distributed opencv openmp python +mxnet_blas_mkl mxnet_blas_openblas 
 
 RDEPEND="
 	sys-devel/gcc[cxx,openmp=]
-	mxnet_blas_mkl? ( ~sci-libs/mkl-2017 )
+	mxnet_blas_mkl? ( ~sci-libs/mkl-2017.3.196 )
 	mxnet_blas_openblas? ( sci-libs/openblas )
 	mxnet_blas_atlas? ( sci-libs/atlas )
 	cuda? ( dev-util/nvidia-cuda-toolkit )

@@ -15,7 +15,7 @@ inherit alternatives-2 intel-sdp-r1 numeric-int64-multibuild
 DESCRIPTION="Intel Math Kernel Library: linear algebra, fft, math functions"
 HOMEPAGE="http://software.intel.com/en-us/articles/intel-mkl/"
 
-IUSE="doc examples mic"
+IUSE="doc examples linguas_ja mic"
 KEYWORDS="-* ~amd64 ~x86 ~amd64-linux ~x86-linux"
 
 DEPEND=""

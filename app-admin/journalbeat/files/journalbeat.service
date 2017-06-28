@@ -1,0 +1,12 @@
+[Unit]
+Description=Journalbeat Service
+After=network.target
+
+[Service]
+Restart=always
+RemainAfterExit=yes
+WorkingDirectory=/var/log/journalbeat
+ExecStart=/usr/bin/journalbeat -c /etc/journalbeat/journalbeat.yml -path.config /etc/journalbeat -path.data /var/lib/journalbeat -path.home /var/lib/journalbeat -path.logs /var/log/journalbeat
+
+[Install]
+WantedBy=multi-user.target

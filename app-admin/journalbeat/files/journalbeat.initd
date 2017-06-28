@@ -1,0 +1,50 @@
+#!/sbin/openrc-run
+# Copyright 1999-2017 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+JOURNALBEAT_USER="${JOURNALBEAT_USER:-root}"
+JOURNALBEAT_GROUP="${JOURNALBEAT_GROUP:-root}"
+JOURNALBEAT_CONFIG="${JOURNALBEAT_CONFIG:-/etc/journalbeat/journalbeat.yml}"
+JOURNALBEAT_DATADIR="${JOURNALBEAT_DATADIR:-/var/lib/journalbeat}"
+JOURNALBEAT_LOGDIR="${JOURNALBEAT_LOGDIR:-/var/log/journalbeat}"
+JOURNALBEAT_OPTS="${JOURNALBEAT_OPTS:-}"
+
+command="/usr/bin/journalbeat"
+command_args="-c ${JOURNALBEAT_CONFIG} ${JOURNALBEAT_OPTS} -path.config $(dirname $JOURNALBEAT_CONFIG) \
+	-path.data ${JOURNALBEAT_DATADIR} -path.home ${JOURNALBEAT_DATADIR} -path.logs ${JOURNALBEAT_LOGDIR}"
+extra_commands="checkconfig"
+command_background="true"
+start_stop_daemon_args="--user ${JOURNALBEAT_USER}:${JOURNALBEAT_GROUP} \
+	--chdir ${JOURNALBEAT_DATADIR}"
+pidfile="/run/journalbeat/journalbeat.pid"
+
+depend() {
+	use net
+	after elasticsearch
+}
+
+checkconfig() {
+	if [ ! -e ${JOURNALBEAT_CONFIG} ]; then
+		eend "Please create a configuration file at ${JOURNALBEAT_CONFIG}"
+		return 1
+	fi
+
+	ebegin "Checking your configuration"
+	${command} ${command_args} -configtest
+	eend $? "Configuration error. Please fix your configuration files."
+}
+
+start_pre() {
+	checkconfig || return 1
+
+	checkpath -d -o "${JOURNALBEAT_USER}":"${JOURNALBEAT_GROUP}" -m750 "$(dirname "${pidfile}")"
+	checkpath -d -o "${JOURNALBEAT_USER}":"${JOURNALBEAT_GROUP}" -m750 "${JOURNALBEAT_DATADIR}"
+	checkpath -d -o "${JOURNALBEAT_USER}":"${JOURNALBEAT_GROUP}" -m750 "${JOURNALBEAT_LOGDIR}"
+}
+
+stop() {
+	ebegin "Stopping journalbeat"
+	start-stop-daemon --stop \
+		--pidfile=${pidfile} \
+		--retry=TERM/5/KILL/5
+}

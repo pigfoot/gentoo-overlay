@@ -1,0 +1,15 @@
+# Run journalbeat under this user/group
+#JOURNALBEAT_USER=""
+#JOURNALBEAT_GROUP=""
+
+# Configuration path
+#JOURNALBEAT_CONFIG=""
+
+# Path to data directory
+#JOURNALBEAT_DATADIR=""
+
+# Path to log directory
+#JOURNALBEAT_LOGDIR=""
+
+# Additional arguments passed to journalbeat
+#JOURNALBEAT_OPTS=""

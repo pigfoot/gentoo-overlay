@@ -6,14 +6,13 @@ EAPI=6
 GOLANG_PKG_NAME="go.rice"
 GOLANG_PKG_IMPORTPATH="github.com/GeertJohan"
 GOLANG_PKG_VERSION="c02ca9a983da5807ddf7d796784928f5be4afd09"
-GOLANG_PKG_IS_MULTIPLE=1
+GOLANG_PKG_BUILDPATH="/rice"
 GOLANG_PKG_HAVE_TEST=1
 GOLANG_PKG_USE_CGO=1
 
 GOLANG_PKG_DEPENDENCIES=(
     "github.com/daaku/go.zipexe:a5fe243"
     "github.com/kardianos/osext:ae77be6"
-    "github.com/davecgh/go-spew:adab964"
     "github.com/jessevdk/go-flags:5695738"
     "github.com/akavel/rsrc:ba14da1"
     "github.com/GeertJohan/go.incremental:1172aab"

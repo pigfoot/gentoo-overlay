@@ -15,16 +15,13 @@ inherit eutils toolchain-funcs pax-utils multiprocessing git-r3
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="examples fontconfig jpeg libressl pcre png truetype"
+IUSE="examples fontconfig libressl truetype"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="dev-libs/icu:=
 	fontconfig? ( media-libs/fontconfig )
-	jpeg? ( virtual/jpeg:0 )
 	!libressl? ( dev-libs/openssl:0 )
 	libressl? ( dev-libs/libressl )
-	pcre? ( dev-libs/libpcre )
-	png? ( media-libs/libpng:0= )
 	truetype? ( media-libs/freetype )
 	dev-db/sqlite:3"
 DEPEND="${RDEPEND}
@@ -64,7 +61,6 @@ src_compile() {
 	./build.py \
 		--confirm \
 		--jobs $(makeopts_jobs) \
-		--qt-config "$($(tc-getPKG_CONFIG) --cflags-only-I freetype2)" \
 		|| die
 }
 

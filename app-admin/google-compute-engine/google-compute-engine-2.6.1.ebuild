@@ -10,7 +10,7 @@ inherit distutils-r1 systemd
 
 GITHUB_USER="GoogleCloudPlatform"
 MY_PN="compute-image-packages"
-MY_TAG="20170622"
+MY_TAG="20170914"
 
 DESCRIPTION="Scripts and tools for Google Compute Engine Linux images."
 HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages"
@@ -55,42 +55,46 @@ INIT=(
 	"google-startup-scripts")
 
 python_install_all() {
-    for _s in "${INIT[@]}"
-    do
-        newinitd "${DISTDIR}/${_s}.${MY_TAG}" "${_s}"
-        systemd_newunit "${DISTDIR}/${_s}.service.${MY_TAG}" "${_s}.service"
-    done
+	for _s in "${INIT[@]}"
+	do
+		if [ "${_s}" = "google-shutdown-scripts" ]; then
+			sed -ri '/local-fs.target/ { /systemd-resolved.service/! s#^(After=.*)$#\1 systemd-resolved.service# }' "${DISTDIR}/${_s}.service.${MY_TAG}"
+		fi
 
-    # Install google-compute-engine python modules.
-    distutils-r1_python_install_all
+		newinitd "${DISTDIR}/${_s}.${MY_TAG}" "${_s}"
+		systemd_newunit "${DISTDIR}/${_s}.service.${MY_TAG}" "${_s}.service"
+	done
+
+	# Install google-compute-engine python modules.
+	distutils-r1_python_install_all
 }
 
 pkg_postinst() {
 	ewarn
 	ewarn "Systems using systemd can do the following:"
 	ewarn "    # Stop existing daemons."
-    ewarn "    systemctl stop --no-block google-accounts-daemon"
-    ewarn "    systemctl stop --no-block google-clock-skew-daemon"
-    ewarn "    systemctl stop --no-block google-ip-forwarding-daemon"
-    ewarn
-    ewarn "    # Enable systemd services."
-    ewarn "    systemctl enable google-accounts-daemon.service"
-    ewarn "    systemctl enable google-clock-skew-daemon.service"
-    ewarn "    systemctl enable google-instance-setup.service"
-    ewarn "    systemctl enable google-ip-forwarding-daemon.service"
-    ewarn "    systemctl enable google-network-setup.service"
-    ewarn "    systemctl enable google-shutdown-scripts.service"
-    ewarn "    systemctl enable google-startup-scripts.service"
-    ewarn
-    ewarn "    # Run instance setup manually to prevent startup script execution."
-    ewarn "    /usr/bin/google_instance_setup"
-    ewarn
-    ewarn "    # Enable network interfaces."
-    ewarn "    /usr/bin/google_network_setup"
-    ewarn
-    ewarn "    # Start daemons."
-    ewarn "    systemctl start --no-block google-accounts-daemon"
-    ewarn "    systemctl start --no-block google-clock-skew-daemon"
-    ewarn "    systemctl start --no-block google-ip-forwarding-daemon"
+	ewarn "    systemctl stop --no-block google-accounts-daemon"
+	ewarn "    systemctl stop --no-block google-clock-skew-daemon"
+	ewarn "    systemctl stop --no-block google-ip-forwarding-daemon"
+	ewarn
+	ewarn "    # Enable systemd services."
+	ewarn "    systemctl enable google-accounts-daemon.service"
+	ewarn "    systemctl enable google-clock-skew-daemon.service"
+	ewarn "    systemctl enable google-instance-setup.service"
+	ewarn "    systemctl enable google-ip-forwarding-daemon.service"
+	ewarn "    systemctl enable google-network-setup.service"
+	ewarn "    systemctl enable google-shutdown-scripts.service"
+	ewarn "    systemctl enable google-startup-scripts.service"
+	ewarn
+	ewarn "    # Run instance setup manually to prevent startup script execution."
+	ewarn "    /usr/bin/google_instance_setup"
+	ewarn
+	ewarn "    # Enable network interfaces."
+	ewarn "    /usr/bin/google_network_setup"
+	ewarn
+	ewarn "    # Start daemons."
+	ewarn "    systemctl start --no-block google-accounts-daemon"
+	ewarn "    systemctl start --no-block google-clock-skew-daemon"
+	ewarn "    systemctl start --no-block google-ip-forwarding-daemon"
 	ewarn
 }

@@ -10,7 +10,7 @@ inherit distutils-r1 systemd
 
 GITHUB_USER="GoogleCloudPlatform"
 MY_PN="compute-image-packages"
-MY_TAG="20170914"
+MY_TAG="20171006"
 
 DESCRIPTION="Scripts and tools for Google Compute Engine Linux images."
 HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages"
@@ -57,10 +57,6 @@ INIT=(
 python_install_all() {
 	for _s in "${INIT[@]}"
 	do
-		if [ "${_s}" = "google-shutdown-scripts" ]; then
-			sed -ri '/local-fs.target/ { /systemd-resolved.service/! s#^(After=.*)$#\1 systemd-resolved.service# }' "${DISTDIR}/${_s}.service.${MY_TAG}"
-		fi
-
 		newinitd "${DISTDIR}/${_s}.${MY_TAG}" "${_s}"
 		systemd_newunit "${DISTDIR}/${_s}.service.${MY_TAG}" "${_s}.service"
 	done

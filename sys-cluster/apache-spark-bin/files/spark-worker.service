@@ -1,0 +1,14 @@
+[Unit]
+Description=Apache Spark worker Daemon
+After=network.target systemd-resolved.service
+Requires=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/env.d/99spark
+User=spark
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment sparkmaster=$(egrep  "^[0-9].*#.* sparkmaster" /etc/hosts | awk '{ print $3}')"
+ExecStart={SPARK_HOME}/sbin/start-slave.sh -- spark://${sparkmaster}:7077"
+
+[Install]
+WantedBy=multi-user.target

@@ -10,7 +10,7 @@ inherit distutils-r1 systemd
 
 GITHUB_USER="GoogleCloudPlatform"
 MY_PN="compute-image-packages"
-MY_TAG="20171006"
+MY_TAG="20171129"
 
 DESCRIPTION="Scripts and tools for Google Compute Engine Linux images."
 HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages"

@@ -26,6 +26,7 @@ src_unpack() {
 
 src_compile() {
 	GOPATH="${WORKDIR}" emake -C "${S}/metricbeat"
+	GOPATH="${WORKDIR}" emake fields -C "${S}/metricbeat"
 }
 
 src_install() {
@@ -44,6 +45,7 @@ src_install() {
 
 	insinto "/etc/${PN}"
 	doins ${PN}/metricbeat.yml
+	newins ${PN}/_meta/fields.generated.yml fields.yml
 	insinto "/etc/${PN}/module"
 	doins -r ${PN}/module/*
 	insinto "/etc/${PN}/modules.d"

@@ -5,6 +5,7 @@ EAPI=6
 
 GOLANG_PKG_IMPORTPATH="github.com/jwilder"
 GOLANG_PKG_BUILDPATH="/cmd/docker-gen"
+GOLANG_PKG_LDFLAGS="-X main.buildVersion=${PV}"
 GOLANG_PKG_HAVE_TEST=1
 
 inherit user golang-single

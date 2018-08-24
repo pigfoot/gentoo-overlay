@@ -15,17 +15,18 @@ SRC_URI="https://nodejs.org/dist/v${PV}/node-v${PV}.tar.xz"
 
 LICENSE="Apache-1.1 Apache-2.0 BSD BSD-2 MIT"
 SLOT="0"
-KEYWORDS="amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x64-macos"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x64-macos"
 IUSE="cpu_flags_x86_sse2 debug doc icu inspector libressl +npm +snapshot +ssl systemtap test"
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
 	inspector? ( icu ssl )
+	npm? ( ssl )
 "
 
 RDEPEND="
 	>=dev-libs/libuv-1.19.1:=
 	>=net-libs/http-parser-2.8.0:=
-	>=net-libs/nghttp2-1.25.0
+	>=net-libs/nghttp2-1.32.0
 	sys-libs/zlib
 	icu? ( >=dev-libs/icu-60.1:= )
 	ssl? (
@@ -92,7 +93,7 @@ src_prepare() {
 	fi
 
 	if use libressl; then
-		epatch "${FILESDIR}"/nodejs-8.11.1-libressl.patch
+		epatch "${FILESDIR}"/nodejs-8.11.4-libressl.patch
 	fi
 
 	default

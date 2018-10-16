@@ -4,7 +4,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python{2_7,3_{4,5,6,7}} pypy{,3} )
+PYTHON_COMPAT=( python{2_7,3_{6,7}} pypy{,3} )
 
 inherit distutils-r1 systemd
 
@@ -37,6 +37,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
     dev-python/boto[${PYTHON_USEDEP}]
+    dev-python/distro[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}

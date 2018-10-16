@@ -69,7 +69,7 @@ pkg_postinst() {
 	ewarn "    # Stop existing daemons."
 	ewarn "    systemctl stop --no-block google-accounts-daemon"
 	ewarn "    systemctl stop --no-block google-clock-skew-daemon"
-	ewarn "    systemctl stop --no-block google-ip-forwarding-daemon"
+	ewarn "    systemctl stop --no-block google-network-daemon"
 	ewarn
 	ewarn "    # Enable systemd services."
 	ewarn "    systemctl enable google-accounts-daemon.service"
@@ -83,8 +83,8 @@ pkg_postinst() {
 	ewarn "    /usr/bin/google_instance_setup"
 	ewarn
 	ewarn "    # Start daemons."
+	ewarn "    systemctl start --no-block google-network-daemon"
 	ewarn "    systemctl start --no-block google-accounts-daemon"
 	ewarn "    systemctl start --no-block google-clock-skew-daemon"
-	ewarn "    systemctl start --no-block google-ip-forwarding-daemon"
 	ewarn
 }

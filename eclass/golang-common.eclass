@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -241,8 +241,9 @@ if [[ ${GOLANG_PKG_ARCHIVESUFFIX/.*} == "xz" ]]; then
 	DEPEND+=" app-arch/xz-utils"
 fi
 
+# Defines common USE flags
+IUSE="${IUSE} debug pie"
 # Enables USE 'test' when required by GOLANG_PKG_HAVE_TEST.
-IUSE="${IUSE} debug"
 if [[ -n ${GOLANG_PKG_HAVE_TEST} ]]; then
 	IUSE+=" test"
 fi
@@ -380,6 +381,7 @@ golang_setup() {
 		# Prepares CGO_ENABLED.
 		CGO_ENABLED=0
 		[[ -z ${GOLANG_PKG_USE_CGO} ]] || CGO_ENABLED=1
+		use pie && CGO_ENABLED=1 # PIE requires CGO
 
 		# Prepares gopath / gobin directories inside WORKDIR.
 		local _GOPATH="${WORKDIR}/gopath"
@@ -405,13 +407,13 @@ golang_setup() {
 }
 
 
-# @FUNCTION: golang-base_src_prepare
+# @FUNCTION: golang-common_src_prepare
 # @DESCRIPTION:
 # Prepare source code.
-golang-base_src_prepare() {
+golang-common_src_prepare() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	pushd "${WORKDIR}" > /dev/null
+	pushd "${WORKDIR}" > /dev/null || die
 		einfo "Preparing GoLang build environment in ${GOPATH}/src"
 
 		# If the ebuild declares an importpath alias, then its path was
@@ -432,14 +434,14 @@ golang-base_src_prepare() {
 
 		# If the ebuild declares some GoLang dependencies, then they need to be
 		# correctly installed into the sand-boxed GoLang build environment which
-		# was set up automatically during pkg_setup() phase.
+		# was set up automatically during src_unpack) phase.
 		if [[ ${#GOLANG_PKG_DEPENDENCIES[@]} -gt 0 ]]; then
 
 			for i in ${!GOLANG_PKG_DEPENDENCIES[@]} ; do
 
 				# Collects all the tokens of the dependency.
 				local -A DEPENDENCY=()
-				while read -d $'\n' key value; do
+				while read -r -d $'\n' key value; do
 					[[ -z ${key} ]] && continue
 					DEPENDENCY[$key]="${value}"
 				done <<-EOF
@@ -507,13 +509,13 @@ golang-base_src_prepare() {
 							mv ${DEPENDENCY[project_name]}-${DEPENDENCY[revision]}* "${GOPATH}"/src/${destdir} || die
 						eend
 						;;
-					*) die "Function 'golang-base_src_prepare' doesn't support '${DEPENDENCY[importpath]}'" ;;
+					*) die "Function 'golang-common_src_prepare' doesn't support '${DEPENDENCY[importpath]}'" ;;
 				esac
 			done
 
 		fi
 
-	popd > /dev/null
+	popd > /dev/null || die
 
 
 	# Auto-detects the presence of Go's vendored
@@ -527,7 +529,7 @@ golang-base_src_prepare() {
 	# Auto-detects the presence of Go's vendored
 	# dependencies inside $S/*/vendor
 	if [[ -n ${GOLANG_PKG_BUILDPATH} && ${GOLANG_PKG_BUILDPATH##*/} != "..." ]]; then
-		while read -d $' ' path; do
+		while read -r -d $' ' path; do
 			# Trims leading slash (if any).
 			path="${path/\//}"
 
@@ -558,10 +560,10 @@ golang-base_src_prepare() {
 }
 
 
-# @FUNCTION: golang-base_src_configure
+# @FUNCTION: golang-common_src_configure
 # @DESCRIPTION:
 # Configure the package.
-golang-base_src_configure() {
+golang-common_src_configure() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	[[ ${EGO} ]] || die "No GoLang implementation set (golang_setup not called?)."
@@ -573,7 +575,7 @@ golang-base_src_configure() {
 	# GoLang doesn't have a configure phase,
 	# so instead this eclass prints the output of 'go env'.
 	local -a GOLANG_ENV=()
-	while read line; do
+	while read -r line; do
 		GOLANG_ENV+=("${line}")
 	done <<-EOF
 		$( ${GO} env )
@@ -600,38 +602,40 @@ golang-base_src_configure() {
 			EGO_SUBPACKAGES+="/..."
 			;;
 	esac
-	einfo "${EGO} clean -i ${EGO_VERBOSE} ${EGO_SUBPACKAGES}"
-	${EGO} clean -i \
-		${EGO_VERBOSE} \
-		"${EGO_SUBPACKAGES}" \
-		|| die
+#	einfo "${EGO} clean -i ${EGO_VERBOSE} ${EGO_SUBPACKAGES}"
+#	${EGO} clean -i \
+#		${EGO_VERBOSE} \
+#		"${EGO_SUBPACKAGES}" \
+#		|| die
 
 	# Removes GoLang objects files from all the dependencies too.
-	if [[ ${#GOLANG_PKG_DEPENDENCIES[@]} -gt 0 ]]; then
-
-		for i in ${!GOLANG_PKG_DEPENDENCIES[@]} ; do
-
-			# Collects all the tokens of the dependency.
-			local -A DEPENDENCY=()
-			while read -d $'\n' key value; do
-				[[ -z ${key} ]] && continue
-				DEPENDENCY[$key]="${value}"
-			done <<-EOF
-				$( _factorize_dependency_entities "${GOLANG_PKG_DEPENDENCIES[$i]}" )
-			EOF
-
-			# Debug
-			debug-print "${FUNCNAME}: DEPENDENCY = ${GOLANG_PKG_DEPENDENCIES[$i]}"
-			debug-print "${FUNCNAME}: importpath = ${DEPENDENCY[importpath]}"
-
-			# Cleans object files of the dependency.
-			einfo "${EGO} clean -i ${EGO_VERBOSE} ${DEPENDENCY[importpath]}"
-			${EGO} clean \
-				-i ${EGO_VERBOSE} \
-				"${DEPENDENCY[importpath]}" \
-				|| die
-		done
-	fi
+#	if [[ ${#GOLANG_PKG_DEPENDENCIES[@]} -gt 0 ]]; then
+#
+#		for i in ${!GOLANG_PKG_DEPENDENCIES[@]} ; do
+#
+#			# Collects all the tokens of the dependency.
+#			local -A DEPENDENCY=()
+#			while read -r -d $'\n' key value; do
+#				[[ -z ${key} ]] && continue
+#				DEPENDENCY[$key]="${value}"
+#			done <<-EOF
+#				$( _factorize_dependency_entities "${GOLANG_PKG_DEPENDENCIES[$i]}" )
+#			EOF
+#
+#			[[ ! -d ${DEPENDENCY[importpath]} ]] && continue
+#
+#			# Debug
+#			debug-print "${FUNCNAME}: DEPENDENCY = ${GOLANG_PKG_DEPENDENCIES[$i]}"
+#			debug-print "${FUNCNAME}: importpath = ${DEPENDENCY[importpath]}"
+#
+#			# Cleans object files of the dependency.
+#			einfo "${EGO} clean -i ${EGO_VERBOSE} ${DEPENDENCY[importpath]}"
+#			${EGO} clean \
+#				-i ${EGO_VERBOSE} \
+#				"${DEPENDENCY[importpath]}" \
+#				|| die
+#		done
+#	fi
 
 	# Before to compile Godep's dependencies it's wise to wipe out
 	# all pre-built object files from Godep's package source directories.
@@ -650,13 +654,13 @@ golang-base_src_configure() {
 	# Executes 'go generate'.
 	# NOTE: generate should never run automatically. It must be run explicitly.
 	if [[ -n ${GOLANG_PKG_USE_GENERATE} ]]; then
-		pushd "${GOPATH}/src/${GOLANG_PKG_IMPORTPATH_ALIAS}/${GOLANG_PKG_NAME}" > /dev/null
+		pushd "${GOPATH}/src/${GOLANG_PKG_IMPORTPATH_ALIAS}/${GOLANG_PKG_NAME}" > /dev/null || die
 			einfo "${EGO} generate ${EGO_VERBOSE} ${GOLANG_PKG_IMPORTPATH_ALIAS}/${GOLANG_PKG_NAME}/..."
 			${EGO} generate \
 				${EGO_VERBOSE} \
 				./... \
 				|| die
-		popd > /dev/null
+		popd > /dev/null || die
 	fi
 
 
@@ -669,10 +673,10 @@ golang-base_src_configure() {
 }
 
 
-# @FUNCTION: golang-base_src_compile
+# @FUNCTION: golang-common_src_compile
 # @DESCRIPTION:
 # Compiles the package.
-golang-base_src_compile() {
+golang-common_src_compile() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	[[ ${EGO} ]] || die "No GoLang implementation set (golang_setup not called?)."
@@ -698,6 +702,10 @@ golang-base_src_compile() {
 		export GOPATH
 	fi
 
+	# Enables position-independent executables (PIE)
+	local EGO_PIE
+	use pie && EGO_PIE="-buildmode=pie"
+
 	# Defines the install suffix.
 	local EGO_INSTALLSUFFIX
 	[[ -z ${GOLANG_PKG_INSTALLSUFFIX} ]] || EGO_INSTALLSUFFIX="-installsuffix=${GOLANG_PKG_INSTALLSUFFIX}"
@@ -713,24 +721,27 @@ golang-base_src_compile() {
 	local EGO_EXTRA_OPTIONS="-a"
 
 	# Prepares build flags for the go toolchain.
-	local EGO_BUILD_FLAGS="$( echo ${EGO_VERBOSE} ) $( echo ${EGO_PARALLEL} ) $( echo ${EGO_EXTRA_OPTIONS} )"
+	local EGO_BUILD_FLAGS="$( echo ${EGO_VERBOSE} ) $( echo ${EGO_PARALLEL} ) $( echo ${EGO_EXTRA_OPTIONS} ) $( echo ${EGO_PIE} )"
 	[[ -n ${EGO_INSTALLSUFFIX} ]] && EGO_BUILD_FLAGS+=" $( echo ${EGO_INSTALLSUFFIX} )"
 
-	# Defines the output binary name of the package.
-	# If the package is a multiple package then this eclass doesn't specify
-	# the output name.
-	[[ -z ${GOLANG_PKG_BUILDPATH} ]] && EGO_BUILD_FLAGS+=" -o ${GOBIN}/${GOLANG_PKG_OUTPUT_NAME}"
+	# Detects the total number of packages.
+	local pkgs=0 ifs_save=${IFS} IFS=$' '
+	for path in ${GOLANG_PKG_BUILDPATH[@]} ; do
+		pkgs=$(( $pkgs + 1 ))
+	done
+	[[ ${pkgs} -eq 0 ]] && pkgs=1 # there is always at least 1 package
+	IFS=${ifs_save}
 
-	# Builds the package.
-	einfo "Compiling package(s):"
-	if [[ -n ${GOLANG_PKG_BUILDPATH} && ${GOLANG_PKG_BUILDPATH##*/} != "..." ]]; then
+	# Builds the package
+	einfo "Compiling ${pkgs} package(s):"
+	if [[ -n ${GOLANG_PKG_BUILDPATH} && ${GOLANG_PKG_BUILDPATH##*/} != "..." && ${pkgs} -gt 1 ]]; then
 
 		# NOTE: This eclass trims all leading and trailing white spaces from the
 		#       input of the following 'while read' loop, then appends an extra
 		#       trailing space; this is necessary to avoid undefined behaviours
 		#       within the loop when GOLANG_PKG_BUILDPATH is populated with only
 		#       a single element.
-		while read -d $' ' cmd; do
+		while read -r -d $' ' cmd; do
 			# Ignores $cmd when it's empty or a string of white spaces
 			#einfo "cmd: |$cmd| cmd: |${cmd##*/}|"
 			[[ -n $cmd ]] || continue
@@ -741,6 +752,10 @@ golang-base_src_compile() {
 				"${GOLANG_PKG_IMPORTPATH_ALIAS}/${GOLANG_PKG_NAME}${cmd}"
 		done <<< "$( echo ${GOLANG_PKG_BUILDPATH}) "
 	else
+		# If the package is a multiple package (/...)
+		# then this eclass doesn't specify the output name.
+		[[ ${GOLANG_PKG_BUILDPATH##*/} != "..." ]] && EGO_BUILD_FLAGS+=" -o ${GOBIN}/${GOLANG_PKG_OUTPUT_NAME}"
+
 		golang_do_build \
 			${EGO_BUILD_FLAGS} \
 			"${GOLANG_PKG_IMPORTPATH_ALIAS}/${GOLANG_PKG_NAME}${GOLANG_PKG_BUILDPATH}"
@@ -748,13 +763,17 @@ golang-base_src_compile() {
 }
 
 
-# @FUNCTION: golang-base_src_install
+# @FUNCTION: golang-common_src_install
 # @DESCRIPTION:
 # Installs binaries and documents from DOCS or HTML_DOCS arrays.
-golang-base_src_install() {
+golang-common_src_install() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	[[ ${EGO} ]] || die "No GoLang implementation set (golang_setup not called?)."
+
+	# Enables position-independent executables (PIE)
+	local EGO_PIE
+	use pie && EGO_PIE="-buildmode=pie"
 
 	# Defines the install suffix.
 	local EGO_INSTALLSUFFIX
@@ -771,7 +790,7 @@ golang-base_src_install() {
 	local EGO_EXTRA_OPTIONS
 
 	# Prepares build flags for the go toolchain.
-	local EGO_BUILD_FLAGS="$( echo ${EGO_VERBOSE} ) $( echo ${EGO_PARALLEL} ) $( echo ${EGO_EXTRA_OPTIONS} )"
+	local EGO_BUILD_FLAGS="$( echo ${EGO_VERBOSE} ) $( echo ${EGO_PARALLEL} ) $( echo ${EGO_EXTRA_OPTIONS} ) $( echo ${EGO_PIE} )"
 	[[ -n ${EGO_INSTALLSUFFIX} ]] && EGO_BUILD_FLAGS+=" $( echo ${EGO_INSTALLSUFFIX} )"
 
 	# Defines sub-packages.
@@ -798,10 +817,10 @@ golang-base_src_install() {
 	einstalldocs
 }
 
-# @FUNCTION: golang-base_src_test
+# @FUNCTION: golang-common_src_test
 # @DESCRIPTION:
 # Runs the unit tests for the main package.
-golang-base_src_test() {
+golang-common_src_test() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	[[ ${EGO} ]] || die "No GoLang implementation set (golang_setup not called?)."
@@ -819,7 +838,7 @@ golang-base_src_test() {
 	local EGO_PARALLEL="-p $(makeopts_jobs)"
 
 	# Defines extra options.
-	local EGO_EXTRA_OPTIONS="-a"
+	#local EGO_EXTRA_OPTIONS="-a"
 
 	# Enables data race detection.
 	local EGO_RACE
@@ -829,16 +848,54 @@ golang-base_src_test() {
 	local EGO_BUILD_FLAGS="$( echo ${EGO_VERBOSE} ) $( echo ${EGO_PARALLEL} ) $( echo ${EGO_EXTRA_OPTIONS} )"
 	[[ -n ${EGO_RACE} ]] && EGO_BUILD_FLAGS+=" $( echo ${EGO_RACE} )"
 
+	# Sanitizes vars from entra white spaces.
+    GOLANG_PKG_LDFLAGS="$( echo ${GOLANG_PKG_LDFLAGS} )"
+    GOLANG_PKG_TAGS="$( echo ${GOLANG_PKG_TAGS} )"
+
 	# Defines sub-packages.
 	local EGO_SUBPACKAGES="${GOLANG_PKG_IMPORTPATH_ALIAS}/${GOLANG_PKG_NAME}${GOLANG_PKG_BUILDPATH}"
 	[[ -z ${GOLANG_PKG_IS_MULTIPLE} ]] || EGO_SUBPACKAGES="./..."
 
-	# Runs the unit tests.
-	einfo "${EGO} test ${EGO_BUILD_FLAGS} ${EGO_SUBPACKAGES}"
-	${EGO} test \
-		${EGO_BUILD_FLAGS} \
-		"${EGO_SUBPACKAGES}" \
-		|| die
+	# Detects the total number of packages.
+	local pkgs=0 ifs_save=${IFS} IFS=$' '
+	for path in ${GOLANG_PKG_BUILDPATH[@]} ; do
+		pkgs=$(( $pkgs + 1 ))
+	done
+	[[ ${pkgs} -eq 0 ]] && pkgs=1 # there is always at least 1 package
+	IFS=${ifs_save}
+
+	# Runs the Unit Tests
+	einfo "Testing ${pkgs} package(s):"
+	if [[ -n ${GOLANG_PKG_BUILDPATH} && ${GOLANG_PKG_BUILDPATH##*/} != "..." && ${pkgs} -gt 1 ]]; then
+
+		# NOTE: This eclass trims all leading and trailing white spaces from the
+		#       input of the following 'while read' loop, then appends an extra
+		#       trailing space; this is necessary to avoid undefined behaviours
+		#       within the loop when GOLANG_PKG_BUILDPATH is populated with only
+		#       a single element.
+		while read -r -d $' ' cmd; do
+			# Ignores $cmd when it's empty or a string of white spaces
+			#einfo "cmd: |$cmd| cmd: |${cmd##*/}|"
+			[[ -n $cmd ]] || continue
+
+			einfo "${EGO} test -ldflags '$GOLANG_PKG_LDFLAGS' -tags '$GOLANG_PKG_TAGS' ${EGO_BUILD_FLAGS} ${GOLANG_PKG_IMPORTPATH_ALIAS}/${GOLANG_PKG_NAME}${cmd}/..."
+			${EGO} test \
+				-ldflags "${GOLANG_PKG_LDFLAGS}" \
+				-tags "${GOLANG_PKG_TAGS}" \
+				${EGO_BUILD_FLAGS} \
+				"${GOLANG_PKG_IMPORTPATH_ALIAS}/${GOLANG_PKG_NAME}${cmd}/..." \
+				|| die
+       done <<< "$( echo ${GOLANG_PKG_BUILDPATH}) "
+	else
+		# It's a single package
+		einfo "${EGO} test -ldflags '$GOLANG_PKG_LDFLAGS' -tags '$GOLANG_PKG_TAGS' ${EGO_BUILD_FLAGS} ${EGO_SUBPACKAGES}"
+		${EGO} test \
+			-ldflags "${GOLANG_PKG_LDFLAGS}" \
+			-tags "${GOLANG_PKG_TAGS}" \
+			${EGO_BUILD_FLAGS} \
+			"${EGO_SUBPACKAGES}" \
+			|| die
+	fi
 }
 
 
@@ -867,7 +924,15 @@ golang_do_build() {
 	fi
 
 	# Disables debug symbols (DWARF) when not required.
-	! use debug && GOLANG_PKG_LDFLAGS="-s -w ${GOLANG_PKG_LDFLAGS}"
+	if ! use debug; then
+		case "${GOLANG_PKG_LDFLAGS}" in
+			*-s*|*-w*)
+			    # Do nothing
+    			;;
+			*)
+				GOLANG_PKG_LDFLAGS+=" -s -w"
+		esac
+	fi
 
 	# Sanitizes vars from entra white spaces.
 	GOLANG_PKG_LDFLAGS="$( echo ${GOLANG_PKG_LDFLAGS} )"
@@ -903,11 +968,11 @@ golang_add_vendor() {
 	[[ ! -d "${1}" ]] && return
 
 	# NOTE: this hack is required by Go v1.4 and older versions.
-	if [[ ! -d "${1}"/src ]]; then
-		ebegin "Fixing $1"
-			ln -s "${1}" "${1}"/src || die
-		eend
-	fi
+	#if [[ ! -d "${1}"/src ]]; then
+	#	ebegin "Fixing $1"
+	#		ln -s "${1}" "${1}"/src || die
+	#	eend
+	#fi
 
 	GOLANG_PKG_VENDOR+=(${1})
 }

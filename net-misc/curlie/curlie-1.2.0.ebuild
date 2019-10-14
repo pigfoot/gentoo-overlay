@@ -20,3 +20,22 @@ RESTRICT="mirror"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~arm"
+IUSE="pie"
+DEPEND+="pie? ( >=sys-devel/gcc-4.8.4[go] )"
+
+src_compile() {
+	if use pie; then
+		CGO_ENABLED=1
+		_build_pie="-buildmode=pie"
+	else
+		CGO_ENABLED=0
+	fi
+
+	EGO_BUILD_FLAGS+="$( echo ${_build_pie} )"
+
+	golang-build_src_compile
+}
+
+src_install() {
+	dobin curlie
+}

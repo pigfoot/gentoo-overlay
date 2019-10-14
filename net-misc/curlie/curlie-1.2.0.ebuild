@@ -14,28 +14,28 @@ EGO_VENDOR=(
 inherit golang-build golang-vcs-snapshot
 
 DESCRIPTION="The power of curl, the ease of use of httpie, written in GoLang"
-SRC_URI="${ARCHIVE_URI} ${EGO_VENDOR_URI}"
+ARCHIVE_URI="https://${EGO_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	${EGO_VENDOR_URI}"
+SRC_URI="${ARCHIVE_URI}"
 RESTRICT="mirror"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~arm"
 IUSE="pie"
-DEPEND+="pie? ( >=sys-devel/gcc-4.8.4[go] )"
 
 src_compile() {
-	if use pie; then
-		CGO_ENABLED=1
-		_build_pie="-buildmode=pie"
-	else
-		CGO_ENABLED=0
-	fi
+	use pie && local build_pie="-buildmode=pie"
+	local build_flags="$( echo ${EGO_BUILD_FLAGS} ) $( echo ${build_pie} )"
 
-	EGO_BUILD_FLAGS+="$( echo ${_build_pie} )"
-
-	golang-build_src_compile
+	set -- env GOPATH="${WORKDIR}/${P}:$(get_golibdir_gopath)" \
+        GOCACHE="${T}/go-cache" \
+        CGO_ENABLED=0 \
+        go build -v -work -x ${build_flags} "${EGO_PN}"
+	echo "$@"
+	"$@" || die
 }
 
 src_install() {
-	dobin curlie
+	dobin ${PN}
 }

@@ -22,7 +22,7 @@ RESTRICT="mirror"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~arm"
-IUSE="pie"
+IUSE="+pie"
 
 src_compile() {
 	use pie && local build_pie="-buildmode=pie"
@@ -31,7 +31,7 @@ src_compile() {
 	set -- env GOPATH="${WORKDIR}/${P}:$(get_golibdir_gopath)" \
         GOCACHE="${T}/go-cache" \
         CGO_ENABLED=0 \
-        go build -v -work -x ${build_flags} "${EGO_PN}"
+        go build -v -work -x ${build_flags} ${EGO_PN}
 	echo "$@"
 	"$@" || die
 }

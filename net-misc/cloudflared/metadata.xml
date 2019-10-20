@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>pigfoot@gmail.com</email>
+		<name>Chen, Chih-Chia</name>
+	</maintainer>
+	<upstream>
+		<remote-id type="github">cloudflare/cloudflared</remote-id>
+		<bugs-to>https://github.com/cloudflare/cloudflared/issues</bugs-to>
+		<doc>https://developers.cloudflare.com/argo-tunnel/</doc>
+	</upstream>
+	<longdescription lang="en">
+		Contains the command-line client and its libraries for
+		Argo Tunnel, a tunneling daemon that proxies any local
+		webserver through the Cloudflare network.
+	</longdescription>
+</pkgmetadata>

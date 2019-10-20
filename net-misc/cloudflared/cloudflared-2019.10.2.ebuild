@@ -28,7 +28,7 @@ src_compile() {
 		GOCACHE="${T}/go-cache" \
 		CGO_ENABLED=0 \
 		GO111MODULE=off \
-		go install -v -work -x ${build_flags} ${EGO_PN}/cmd/...
+		go install -v -work -x ${build_flags} -ldflags "-X \"main.Version=${PV}\" -X \"main.BuildTime=$(date -u '+%Y-%m-%d-%H%M UTC')\"" ${EGO_PN}/cmd/...
 	echo "$@"
 	"$@" || die
 }

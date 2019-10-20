@@ -29,13 +29,14 @@ src_compile() {
 	local build_flags="$( echo ${EGO_BUILD_FLAGS} ) $( echo ${build_pie} )"
 
 	set -- env GOPATH="${WORKDIR}/${P}:$(get_golibdir_gopath)" \
-        GOCACHE="${T}/go-cache" \
-        CGO_ENABLED=0 \
-        go build -v -work -x ${build_flags} ${EGO_PN}
+		GOCACHE="${T}/go-cache" \
+		CGO_ENABLED=0 \
+		GO111MODULE=off \
+		go install -v -work -x ${build_flags} ${EGO_PN}
 	echo "$@"
 	"$@" || die
 }
 
 src_install() {
-	dobin ${PN}
+	dobin bin/*
 }

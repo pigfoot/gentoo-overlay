@@ -42,6 +42,10 @@ src_compile() {
 		go install -v -work -x ${build_flags} ${EGO_PN}
 	echo "$@"
 	"$@" || die
+}
+
+src_install() {
+	dobin bin/*
 
 	local go_srcpath="${WORKDIR}/${P}/src/${EGO_PN}"
 
@@ -85,8 +89,4 @@ src_compile() {
 		insinto /usr/share/zsh/site-contrib/
 		newins ${go_srcpath}/shell/key-bindings.zsh ${PN}.zsh
 	fi
-}
-
-src_install() {
-	dobin bin/*
 }

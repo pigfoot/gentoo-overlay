@@ -16,12 +16,15 @@ SRC_URI="${ARCHIVE_URI}"
 RESTRICT="mirror"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/${PVR}"
 KEYWORDS="~amd64 ~x86 ~arm"
 IUSE="+pie"
 
 src_compile() {
+	# -buildmode=pie forces external linking mode, even CGO_ENABLED=0
+	# https://github.com/golang/go/issues/18968
 	use pie && local build_pie="-buildmode=pie"
+
 	local build_flags="$( echo ${EGO_BUILD_FLAGS} ) $( echo ${build_pie} )"
 
 	set -- env GOPATH="${WORKDIR}/${P}:$(get_golibdir_gopath)" \

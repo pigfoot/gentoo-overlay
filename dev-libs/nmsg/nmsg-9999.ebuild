@@ -1,40 +1,43 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
-EAPI=5
+EAPI=7
 
-inherit eutils autotools-utils
+inherit autotools
 
-if [[ ${PV} == "9999" ]] ; then
-    EGIT_REPO_URI="https://github.com/farsightsec/${PN}.git
-                   git://github.com/farsightsec/${PN}.git"
-    EGIT_MASTER="master"
-    inherit git-2
+MY_PN="github.com/farsightsec/${PN}"
+MY_P="${P}"
+
+if [[ "${PV}" == "9999" ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://${MY_PN}"
+	EGIT_SUBMODULES=()
+else
+	EGIT_COMMIT="v${PV}"
+	MY_P="${PN}-tags-${EGIT_COMMIT}"
+	SRC_URI="https://${MY_PN}/archive/tags/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
 fi
 
-DESCRIPTION="Network message encapsulation library."
+DESCRIPTION="network message encapsulation library"
 HOMEPAGE="https://github.com/farsightsec/nmsg"
 
 LICENSE="Apache-2.0"
-SLOT="0"
-KEYWORDS="~x86 ~amd64"
+SLOT="0/${PVR}"
+KEYWORDS="~amd64 ~x86"
+IUSE=""
 
 DEPEND="net-libs/libpcap:=
-        dev-libs/protobuf:=
-        dev-libs/protobuf-c:=
-        dev-libs/wdns:=
-        dev-libs/libxs:=
-        sys-libs/zlib:="
-
+		dev-libs/protobuf:=
+		dev-libs/protobuf-c:=
+		dev-libs/wdns:=
+		dev-libs/libxs:=
+		sys-libs/zlib:="
 RDEPEND="${DEPEND}"
 
-AUTOTOOLS_AUTORECONF=yes
+S="${WORKDIR}/${MY_P}"
 
 src_prepare() {
-    ./autogen.sh || die
-}
+	default
 
-src_install() {
-    autotools-utils_src_install
+	eautoreconf
 }

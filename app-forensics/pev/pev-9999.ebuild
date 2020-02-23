@@ -36,12 +36,12 @@ src_unpack() {
 	default
 
 	if [[ "${PV}" == "9999" ]]; then
-        git-r3_src_unpack
-    else
-    	unpack ${P}.tar.gz
-        unpack libpe-${EGIT_COMMIT_LIBPE}.tar.gz
-        set -- env \
-        cp -rp libpe-${EGIT_COMMIT_LIBPE}/* ${MY_P}/lib/libpe
+		git-r3_src_unpack
+	else
+		unpack ${P}.tar.gz
+		unpack libpe-${EGIT_COMMIT_LIBPE}.tar.gz
+		set -- env \
+		cp -rp libpe-${EGIT_COMMIT_LIBPE}/* ${MY_P}/lib/libpe
 		echo "$@"
 		"$@" || die
     fi

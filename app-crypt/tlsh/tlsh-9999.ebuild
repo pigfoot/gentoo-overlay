@@ -12,10 +12,12 @@ if [[ "${PV}" == "9999" ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://${MY_PN}"
 	EGIT_SUBMODULES=()
+	KEYWORDS="~amd64 ~x86"
 else
 	EGIT_COMMIT=${PV}
 	MY_P="${PN}-${EGIT_COMMIT}"
 	SRC_URI="https://${MY_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="amd64 x86"
 fi
 
 DESCRIPTION="Trend Micro Locality Sensitive Hash"
@@ -23,7 +25,6 @@ HOMEPAGE="https://github.com/trendmicro/tlsh"
 
 LICENSE="Apache-2.0"
 SLOT="0/${PVR}"
-KEYWORDS="~amd64 ~x86"
 IUSE=""
 RESTRICT="mirror"
 

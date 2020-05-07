@@ -3,7 +3,7 @@
 
 EAPI=7
 
-MY_PN="github.com/jorgonzalez/${PN}"
+MY_PN="github.com/fnogcps/tg"
 MY_P="${P}"
 
 if [[ "${PV}" == "9999" ]]; then
@@ -13,13 +13,13 @@ if [[ "${PV}" == "9999" ]]; then
 else
 	EGIT_COMMIT="20200106"
 	EGIT_COMMIT_TGL="57f1bc41ae13297e6c3e23ac465fd45ec6659f50"
-	MY_P="${PN}-${EGIT_COMMIT}"
+	MY_P="tg-${EGIT_COMMIT}"
 	SRC_URI="https://${MY_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz
-		https://github.com/kenorb-contrib/tgl//archive/${EGIT_COMMIT_TGL}.tar.gz -> tgl-${EGIT_COMMIT_TGL}.tar.gz"
+		https://github.com/kenorb-contrib/tgl/archive/${EGIT_COMMIT_TGL}.tar.gz -> tgl-${EGIT_COMMIT_TGL}.tar.gz"
 fi
 
 DESCRIPTION="telegram-cli for Telegram IM"
-HOMEPAGE="https://github.com/jorgonzalez/telegram-cli"
+HOMEPAGE="https://github.com/fnogcps/tg"
 
 LICENSE="GPL-2"
 SLOT="0/${PVR}"
@@ -28,7 +28,7 @@ IUSE="json libressl lua luajit"
 RESTRICT="mirror"
 
 DEPEND="sys-libs/zlib
-		sys-libs/readline
+		sys-libs/readline:0=
 		dev-libs/libconfig
 		dev-libs/libevent
 		json? ( dev-libs/jansson )

@@ -35,6 +35,8 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}"
 
+CMAKE_BUILD_TYPE=Release
+
 src_configure() {
-	./configure --prefix=/usr
+	sh ./configure --prefix=/usr
 }

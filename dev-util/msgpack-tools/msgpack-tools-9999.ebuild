@@ -3,10 +3,10 @@
 
 EAPI=7
 
-inherit cmake
-
 CMAKE_IN_SOURCE_BUILD=1
 CMAKE_MAKEFILE_GENERATOR=emake
+
+inherit cmake
 
 MY_PN="github.com/ludocode/${PN}"
 MY_P="${P}"

@@ -14,6 +14,7 @@ MY_P="${P}"
 if [[ "${PV}" == "9999" ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://${MY_PN}"
+	EGIT_BRANCH="develop"
 	EGIT_SUBMODULES=()
 else
 	EGIT_COMMIT="v${PV}"
@@ -34,8 +35,6 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}"
-
-CMAKE_BUILD_TYPE=Release
 
 src_configure() {
 	sh ./configure --prefix=/usr

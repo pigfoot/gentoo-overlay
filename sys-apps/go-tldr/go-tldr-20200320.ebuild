@@ -4,7 +4,7 @@
 EAPI=7
 
 EGO_PN="github.com/isacikgoz/tldr"
-EGIT_COMMIT="3918253df491996b5618f2eb3de015170d63c21a"
+EGIT_COMMIT="c5b317479265ad52dd952329070d4af3fc6ed50e"
 EGO_VENDOR=(
 	"github.com/c-bata/go-prompt v0.2.3"
 	"github.com/fatih/color v1.7.0"

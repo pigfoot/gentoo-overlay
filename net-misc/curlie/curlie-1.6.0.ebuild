@@ -8,7 +8,7 @@ EGO_VENDOR=(
 	"github.com/akamensky/argparse 99676ba18cd5"
 	"github.com/jessevdk/go-flags v1.4.0"
 	"golang.org/x/crypto 159ae71589f3 github.com/golang/crypto"
-	"golang.org/x/sys 31355384c89b github.com/golang/sys"
+	"golang.org/x/sys 33540a1f6037 github.com/golang/sys"
 )
 
 inherit golang-build golang-vcs-snapshot

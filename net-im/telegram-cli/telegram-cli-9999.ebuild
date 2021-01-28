@@ -32,11 +32,7 @@ DEPEND="sys-libs/zlib
 		dev-libs/libconfig
 		dev-libs/libevent
 		json? ( dev-libs/jansson )
-
-		lua? (
-			!luajit? ( >=dev-lang/lua-5.1:= )
-			luajit? ( dev-lang/luajit:2 )
-		)
+		lua? ( !luajit? ( >=dev-lang/lua-5.2:= )
 
 		!libressl? ( dev-libs/openssl:0= )
 		libressl? ( dev-libs/libressl:0= )"

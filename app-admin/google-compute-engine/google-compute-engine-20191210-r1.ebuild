@@ -3,8 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} pypy3 )
-DISTUTILS_USE_SETUPTOOLS=bdepend
+PYTHON_COMPAT=( python3_{9..10} pypy3 )
+DISTUTILS_USE_SETUPTOOLS=rdepend
 
 inherit distutils-r1 systemd
 
@@ -39,9 +39,11 @@ HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages"
 LICENSE="Apache-2.0"
 SLOT="0/${PVR}"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="mirror"
+
+distutils_enable_tests pytest
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 RDEPEND="${DEPEND}

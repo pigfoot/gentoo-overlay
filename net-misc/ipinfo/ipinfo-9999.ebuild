@@ -25,12 +25,12 @@ else
 
     SRC_URI+="${EGO_SUM_SRC_URI}"
     S="${WORKDIR}/cli-${EGO_VER}"
+    KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 fi
 
 DESCRIPTION="Official Command Line Interface for the IPinfo API "
 LICENSE="Apache-2.0"
 SLOT="0/${PVR}"
-KEYWORDS="~amd64 ~x86 ~arm"
 RESTRICT="mirror"
 IUSE="+pie"
 

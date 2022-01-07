@@ -25,12 +25,12 @@ else
 
     SRC_URI+="${EGO_SUM_SRC_URI}"
     S="${WORKDIR}/${EGO_VER}"
+    KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 fi
 
 DESCRIPTION="Argo Tunnel client, written in GoLang"
 LICENSE="Apache-2.0"
 SLOT="0/${PVR}"
-KEYWORDS="~amd64 ~x86 ~arm"
 RESTRICT="mirror"
 IUSE="+pie"
 

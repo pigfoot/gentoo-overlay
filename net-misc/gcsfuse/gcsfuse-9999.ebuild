@@ -10,6 +10,7 @@ inherit go-module
 if [[ ${PV} == *9999* ]]; then
     inherit git-r3
     EGIT_REPO_URI="https://${EGO_PN}.git"
+    KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 
     src_unpack() {
         git-r3_src_unpack
@@ -30,7 +31,6 @@ fi
 DESCRIPTION="A user-space file system for interacting with Google Cloud Storage"
 LICENSE="Apache-2.0"
 SLOT="0/${PVR}"
-KEYWORDS="~amd64 ~x86 ~arm"
 RESTRICT="mirror"
 IUSE="+pie"
 

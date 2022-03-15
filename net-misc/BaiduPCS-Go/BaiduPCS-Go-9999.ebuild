@@ -3,7 +3,7 @@
 
 EAPI=8
 
-EGO_PN="github.com/rs/${PN}"
+EGO_PN="github.com/qjfoidnh/${PN}"
 
 inherit go-module
 
@@ -31,8 +31,8 @@ else
     KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 fi
 
-DESCRIPTION="The power of curl, the ease of use of httpie, written in GoLang"
-LICENSE="MIT"
+DESCRIPTION="BaiDu PCS client, written in GoLang"
+LICENSE="Apache-2.0"
 SLOT="0/${PVR}"
 RESTRICT="mirror"
 IUSE="+pie"
@@ -46,7 +46,8 @@ src_compile() {
 
     set -- env \
         CGO_ENABLED=0 \
-        go build -o "bin/${PN}" -mod=vendor -v -work -x ${build_flags} \
+        go build -o "bin/baidu-pcs" -mod=vendor -v -work -x ${build_flags} \
+            -ldflags '-s -w -X main.Version='${EGO_VER} \
             .
     echo "$@"
     "$@" || die

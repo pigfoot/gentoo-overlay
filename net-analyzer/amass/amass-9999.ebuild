@@ -58,5 +58,5 @@ src_install() {
     dobin bin/${PN}
 
     insinto /etc/amass
-    doins "${FILESDIR}"/examples/config.ini
+    doins "${S}"/examples/config.ini
 }

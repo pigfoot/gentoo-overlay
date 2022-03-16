@@ -43,11 +43,11 @@ src_compile() {
     use pie && local build_pie="-buildmode=pie"
 
     local build_flags="$( echo ${EGO_BUILD_FLAGS} ) $( echo ${build_pie} )"
-    local ld_flags=""
+    local ld_flags="$( echo "" )"
 
     set -- env \
         CGO_ENABLED=0 \
-        go build -o "bin/${PN}" -mod=vendor -v -work -x "${build_flags}" -ldflags "${ld_flags}" \
+        go build -o "bin/${PN}" -mod=vendor -v -work -x ${build_flags} -ldflags "${ld_flags}" \
             ./cmd/${PN}
     echo "$@"
     "$@" || die

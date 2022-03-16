@@ -3,7 +3,7 @@
 
 EAPI=8
 
-EGO_PN="github.com/OWASP/Amass"
+EGO_PN="github.com/mrichman/${PN}"
 
 inherit go-module
 
@@ -31,8 +31,8 @@ else
     KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 fi
 
-DESCRIPTION="In-depth Attack Surface Mapping and Asset Discovery"
-LICENSE="Apache-2.0"
+DESCRIPTION="A command line utility that parses HAR files, written in GoLang"
+LICENSE="MIT"
 SLOT="0/${PVR}"
 RESTRICT="mirror"
 IUSE="+pie"
@@ -43,7 +43,7 @@ src_compile() {
     use pie && local build_pie="-buildmode=pie"
 
     local build_flags="$( echo ${EGO_BUILD_FLAGS} ) $( echo ${build_pie} )"
-    local ld_flags=""
+    local ld_flags="$( echo "-s -w -X 'main.Version=${EGO_VER}' -X 'main.CommitHash=${EGIT_VERSION}' -X 'main.CompileDate=$(date --iso-8601=seconds)'" )"
 
     set -- env \
         CGO_ENABLED=0 \
@@ -55,7 +55,4 @@ src_compile() {
 
 src_install() {
     dobin bin/*
-
-    insinto /etc/amass
-    doins "${S}"/examples/config.ini
 }

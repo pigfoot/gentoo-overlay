@@ -43,10 +43,11 @@ src_compile() {
     use pie && local build_pie="-buildmode=pie"
 
     local build_flags="$( echo ${EGO_BUILD_FLAGS} ) $( echo ${build_pie} )"
+    local ld_flags="$( echo "-s -w -X 'main.version=${EGO_VER}' -X 'main.commit=${EGIT_VERSION}' -X 'main.date=$(date --iso-8601=seconds)'" )"
 
     set -- env \
         CGO_ENABLED=0 \
-        go build -o "bin/${PN}" -mod=vendor -v -work -x ${build_flags} \
+        go build -o "bin/${PN}" -mod=vendor -v -work -x "${build_flags}" -ldflags "${ld_flags}" \
             .
     echo "$@"
     "$@" || die

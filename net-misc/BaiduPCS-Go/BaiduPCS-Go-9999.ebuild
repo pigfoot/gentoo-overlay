@@ -43,11 +43,11 @@ src_compile() {
     use pie && local build_pie="-buildmode=pie"
 
     local build_flags="$( echo ${EGO_BUILD_FLAGS} ) $( echo ${build_pie} )"
+    local ld_flags="$( echo "-s -w -X 'main.Version='${EGO_VER}'" )"
 
     set -- env \
         CGO_ENABLED=0 \
-        go build -o "bin/baidu-pcs" -mod=vendor -v -work -x ${build_flags} \
-            -ldflags '-s -w -X main.Version='${EGO_VER} \
+        go build -o "bin/baidu-pcs" -mod=vendor -v -work -x "${build_flags}" -ldflags "${ld_flags}" \
             .
     echo "$@"
     "$@" || die

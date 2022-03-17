@@ -47,7 +47,7 @@ src_compile() {
 
     set -- env \
         CGO_ENABLED=0 \
-        go build -o "bin/${PN}" -mod=vendor -v -work -x "${build_flags}" -ldflags "${ld_flags}" \
+        go build -o "bin/${PN}" -mod=vendor -v -work -x ${build_flags} -ldflags "${ld_flags}" \
             ./cmd/${PN}
     echo "$@"
     "$@" || die

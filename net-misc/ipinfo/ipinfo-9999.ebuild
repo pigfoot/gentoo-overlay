@@ -1,7 +1,7 @@
 # Copyright 2019-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 EGO_PN="github.com/ipinfo/cli"
 
@@ -10,25 +10,29 @@ inherit go-module
 if [[ ${PV} == *9999* ]]; then
     inherit git-r3
     EGIT_REPO_URI="https://${EGO_PN}.git"
+    EGO_VER="devel"
 
     src_unpack() {
         git-r3_src_unpack
         #go-module_live_vendor
     }
 else
-    EGO_VER="${P}"
-    SRC_URI="https://${EGO_PN}/archive/${EGO_VER}.tar.gz -> ${P}.tar.gz"
+    EGO_VER="v${PV}"
+    SRC_URI="https://${EGO_PN}/archive/${P}.tar.gz -> ${P}.tar.gz"
+    #inherit git-r3
+    #EGIT_REPO_URI="https://${EGO_PN}.git"
+    #EGIT_COMMIT="${EGO_VER}"
 
-    EGO_SUM=(
-    )
-    go-module_set_globals
+    #src_unpack() {
+    #    git-r3_src_unpack
+    #    go-module_live_vendor
+    #}
 
-    SRC_URI+="${EGO_SUM_SRC_URI}"
-    S="${WORKDIR}/cli-${EGO_VER}"
+    S="${WORKDIR}/cli-${P}"
     KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 fi
 
-DESCRIPTION="Official Command Line Interface for the IPinfo API "
+DESCRIPTION="Official Command Line Interface for the IPinfo API"
 LICENSE="Apache-2.0"
 SLOT="0/${PVR}"
 RESTRICT="mirror"
@@ -40,16 +44,16 @@ src_compile() {
     use pie && local build_pie="-buildmode=pie"
 
     local build_flags="$( echo ${EGO_BUILD_FLAGS} ) $( echo ${build_pie} )"
+    local ld_flags="$( echo "" )"
 
     set -- env \
-        GOCACHE="${T}/go-cache" \
         CGO_ENABLED=0 \
-        go build -o "bin/${PN}" -mod=vendor -v -work -x ${build_flags} \
+        go build -o "bin/${PN}" -mod=vendor -v -work -x ${build_flags} -ldflags "${ld_flags}" \
             ./${PN}
     echo "$@"
     "$@" || die
 }
 
 src_install() {
-    dobin bin/${PN}
+    dobin bin/*
 }

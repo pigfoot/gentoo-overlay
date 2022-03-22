@@ -38,9 +38,11 @@ SLOT="0/${PVR}"
 RESTRICT="mirror"
 IUSE="+pie"
 
+if [[ ${PV} != *9999* ]]; then
 PATCHES=(
     "${FILESDIR}/00-feature-workgroup.patch"
 )
+fi
 
 src_compile() {
     # -buildmode=pie forces external linking mode, even CGO_ENABLED=0

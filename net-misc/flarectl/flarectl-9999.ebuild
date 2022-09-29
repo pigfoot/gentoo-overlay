@@ -32,7 +32,7 @@ else
 fi
 
 DESCRIPTION="Command Line for the Cloudflare v4 API"
-LICENSE="BSD-3"
+LICENSE="BSD"
 SLOT="0/${PVR}"
 RESTRICT="mirror"
 IUSE="+pie"

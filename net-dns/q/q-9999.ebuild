@@ -54,5 +54,5 @@ src_compile() {
 }
 
 src_install() {
-    dobin bin/*
+    newbin bin/q dnsq
 }

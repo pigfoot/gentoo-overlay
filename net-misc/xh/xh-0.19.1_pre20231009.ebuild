@@ -279,15 +279,29 @@ LICENSE="MIT"
 LICENSE+=" Apache-2.0 BSD ISC MIT MPL-2.0 Unicode-DFS-2016"
 SLOT="0"
 RESTRICT="mirror"
+IUSE="+rustls"
 
 QA_FLAGS_IGNORED="usr/bin/${PN}"
 
 src_unpack() {
     if [[ ${PV} == *9999* ]]; then
         git-r3_src_unpack
-		rm -f "${S}"/Cargo.lock
         cargo_live_src_unpack
     else
         cargo_src_unpack
     fi
+}
+
+src_configure() {
+    myfeatures=(
+        $(usex rustls rustls native-tls)
+    )
+
+    cargo_src_configure --no-default-features
+}
+
+src_install() {
+    cargo_src_install
+
+    dosym /usr/bin/"${PN}" /usr/bin/"s${PN}"
 }

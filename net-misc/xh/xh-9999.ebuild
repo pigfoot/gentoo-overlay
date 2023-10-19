@@ -53,5 +53,5 @@ src_configure() {
 src_install() {
     cargo_src_install
 
-    dosym /usr/bin/"${PN}" /usr/bin/"s${PN}"
+    dosym /usr/bin/"${PN}" /usr/bin/"${PN}s"
 }

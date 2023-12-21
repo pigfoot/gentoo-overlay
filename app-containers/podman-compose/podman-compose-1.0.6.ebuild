@@ -3,23 +3,29 @@
 
 EAPI=8
 
-DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..12} )
-inherit distutils-r1
+
+inherit python-r1 bash-completion-r1
 
 DESCRIPTION="a script to run docker-compose.yml using podman"
 HOMEPAGE="https://github.com/containers/podman-compose"
 SRC_URI="https://github.com/containers/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-#S="${WORKDIR}/${PN}-release-${PV}"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~arm64"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 BDEPEND="
-	dev-python/pyyaml[${PYTHON_USEDEP}]
-	dev-python/python-dotenv[${PYTHON_USEDEP}]
+    dev-python/pyyaml[${PYTHON_USEDEP}]
+    dev-python/python-dotenv[${PYTHON_USEDEP}]
 "
-RDEPEND="${BDEPEND}"
+RDEPEND="${PYTHON_DEPS}
+    app-containers/podman
+    ${BDEPEND}"
 
-distutils_enable_tests pytest
+src_install() {
+	newbin podman_compose.py ${PN}
+	python_replicate_script "${D}"/usr/bin/${PN}
+	newbashcomp completion/bash/podman-compose ${PN}
+}

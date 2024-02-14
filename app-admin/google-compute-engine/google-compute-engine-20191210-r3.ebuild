@@ -1,10 +1,10 @@
-# Copyright 2021 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{9..11} pypy3 )
-DISTUTILS_USE_SETUPTOOLS=rdepend
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{10..12} pypy3 )
 
 inherit distutils-r1 systemd
 
@@ -37,18 +37,17 @@ DESCRIPTION="Scripts and tools for Google Compute Engine Linux images."
 HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages"
 
 LICENSE="Apache-2.0"
-SLOT="0/${PVR}"
-KEYWORDS="~amd64 ~x86"
+SLOT="0"
+KEYWORDS="amd64 arm arm64 x86"
 IUSE="test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="mirror"
 
 distutils_enable_tests pytest
 
-DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
-RDEPEND="${DEPEND}
-	dev-python/distro[${PYTHON_USEDEP}]"
-BDEPEND="${RDEPEND}"
+RDEPEND="
+	dev-python/distro[${PYTHON_USEDEP}]
+"
 
 S="${WORKDIR}/${MY_P}/packages/python-google-compute-engine"
 

@@ -11,7 +11,7 @@ S="${WORKDIR}"
 DESCRIPTION="Command line interface for the Bitwarden password manager"
 LICENSE="GPL-3"
 SLOT="0"
-RESTRICT="mirror"
+RESTRICT="mirror strip"
 KEYWORDS="~amd64"
 
 BDEPEND="app-arch/unzip"

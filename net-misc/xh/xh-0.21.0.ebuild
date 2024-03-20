@@ -281,7 +281,7 @@ fi
 
 LICENSE="MIT"
 # Dependent crate licenses
-LICENSE+="0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD Boost-1.0 ISC MPL-2.0 Unicode-DFS-2016 Unlicense ZLIB"
+LICENSE+=" 0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD Boost-1.0 ISC MPL-2.0 Unicode-DFS-2016 Unlicense ZLIB"
 SLOT="0"
 RESTRICT="mirror"
 IUSE="+rustls"

@@ -1,4 +1,4 @@
-# Copyright 2023 Gentoo Authors
+# Copyright 2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -266,14 +266,16 @@ inherit cargo
 
 DESCRIPTION="Friendly and fast tool for sending HTTP requests"
 HOMEPAGE="https://github.com/ducaale/xh"
+GITHUB_USER=ducaale
+GITHUB_REPO=${PN}
 
 if [[ ${PV} == *9999 ]]; then
-    EGIT_REPO_URI="https://github.com/ducaale/${PN}"
+    EGIT_REPO_URI="https://github.com/${GITHUB_USER}/${GITHUB_REPO}"
     inherit git-r3
 else
-    [[ ${PV} == *_pre???????? ]] && COMMIT="0e4a87baf18652bb982df3fd2362fad0596ad12d"
+    [[ ${PV} == *_pre???????? ]] && COMMIT=""
 
-    SRC_URI="https://github.com/ducaale/${PN}/archive/${COMMIT:-v${PV}}.tar.gz -> ${P}.tar.gz
+    SRC_URI="https://github.com/${GITHUB_USER}/${GITHUB_REPO}/archive/${COMMIT:-v${PV}}.tar.gz -> ${P}.tar.gz
         ${CARGO_CRATE_URIS}"
     S="${WORKDIR}/${PN}-${COMMIT:-${PV}}"
     KEYWORDS="amd64 x86 arm arm64 ~ppc64 ~riscv"
@@ -305,8 +307,12 @@ src_configure() {
     cargo_src_configure --no-default-features
 }
 
+src_compile() {
+    cargo_src_compile --bin=${PN}
+}
+
 src_install() {
-    cargo_src_install
+    cargo_src_install --bin=${PN}
 
     dosym /usr/bin/"${PN}" /usr/bin/"${PN}s"
 }

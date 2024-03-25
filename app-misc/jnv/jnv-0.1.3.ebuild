@@ -1,4 +1,4 @@
-# Copyright 2023 Gentoo Authors
+# Copyright 2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -80,7 +80,7 @@ if [[ ${PV} != *9999 ]]; then
 	signal-hook@0.3.17
 	signal-hook-mio@0.2.3
 	signal-hook-registry@1.4.1
-	smallvec@1.13.1
+	smallvec@1.13.2
 	strsim@0.11.0
 	syn@2.0.53
 	tempfile@3.10.1
@@ -121,14 +121,16 @@ inherit cargo
 
 DESCRIPTION="interactive JSON filter using jq"
 HOMEPAGE="https://github.com/ynqa/jnv"
+GITHUB_USER=ynqa
+GITHUB_REPO=${PN}
 
 if [[ ${PV} == *9999 ]]; then
-    EGIT_REPO_URI="https://github.com/ynqa/${PN}"
+    EGIT_REPO_URI="https://github.com/${GITHUB_USER}/${GITHUB_REPO}"
     inherit git-r3
 else
     [[ ${PV} == *_pre???????? ]] && COMMIT=""
 
-    SRC_URI="https://github.com/ynqa/${PN}/archive/${COMMIT:-v${PV}}.tar.gz -> ${P}.tar.gz
+    SRC_URI="https://github.com/${GITHUB_USER}/${GITHUB_REPO}/archive/${COMMIT:-v${PV}}.tar.gz -> ${P}.tar.gz
         ${CARGO_CRATE_URIS}"
     S="${WORKDIR}/${PN}-${COMMIT:-${PV}}"
     KEYWORDS="amd64 x86 arm arm64 ~ppc64 ~riscv"
@@ -151,8 +153,10 @@ src_unpack() {
     fi
 }
 
-src_install() {
-    cargo_src_install
+src_compile() {
+    cargo_src_compile --bin=${PN}
+}
 
-    dosym /usr/bin/"${PN}" /usr/bin/"${PN}s"
+src_install() {
+    cargo_src_install --bin=${PN}
 }

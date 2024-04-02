@@ -56,7 +56,7 @@ src_compile() {
 src_install() {
     newbin bin/${PN} doggo
 
-    newbashcomp completions/${PN}.bash ${PN}
-▎   newfishcomp completions/${PN}.fish ${PN}
-    newzshcomp completions/${PN}.zsh ${PN}
+    [[ -r completions/${PN}.bash ]] && newbashcomp completions/${PN}.bash ${PN}
+    [[ -r completions/${PN}.fish ]] && newfishcomp completions/${PN}.fish ${PN}
+    [[ -r completions/${PN}.zsh ]]  && newzshcomp  completions/${PN}.zsh  ${PN}
 }

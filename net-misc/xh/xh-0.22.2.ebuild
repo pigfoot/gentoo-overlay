@@ -29,6 +29,7 @@ if [[ ${PV} != *9999 ]]; then
 	brotli-decompressor@2.5.1
 	bstr@1.9.1
 	bumpalo@3.16.0
+	byteorder@1.5.0
 	bytes@1.6.0
 	cc@1.0.92
 	cfg-if@1.0.0
@@ -58,6 +59,8 @@ if [[ ${PV} != *9999 ]]; then
 	encode_unicode@0.3.6
 	encoding_rs@0.8.34
 	encoding_rs_io@0.1.7
+	env_filter@0.1.0
+	env_logger@0.11.3
 	equivalent@1.0.1
 	errno@0.3.8
 	fastrand@2.0.2
@@ -88,6 +91,7 @@ if [[ ${PV} != *9999 ]]; then
 	http-body-util@0.1.1
 	httparse@1.8.0
 	httpdate@1.0.3
+	humantime@2.1.0
 	hyper@1.2.0
 	hyper-rustls@0.26.0
 	hyper-tls@0.6.0
@@ -104,7 +108,7 @@ if [[ ${PV} != *9999 ]]; then
 	js-sys@0.3.69
 	jsonxf@1.1.1
 	lazy_static@1.4.0
-	libc@0.2.153
+	libc@0.2.154
 	libredox@0.1.3
 	line-wrap@0.2.0
 	linked-hash-map@0.5.6
@@ -173,6 +177,7 @@ if [[ ${PV} != *9999 ]]; then
 	rustls-pemfile@2.1.2
 	rustls-pki-types@1.4.1
 	rustls-webpki@0.102.2
+	ruzstd@0.7.0
 	ryu@1.0.17
 	same-file@1.0.6
 	schannel@0.1.23

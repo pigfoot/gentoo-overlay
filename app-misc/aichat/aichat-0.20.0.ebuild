@@ -414,7 +414,7 @@ fi
 
 LICENSE="Apache-2.0"
 # Dependent crate licenses
-LICENSE+="0BSD Apache-2.0-with-LLVM-exceptions BSD BSD-2 Boost-1.0 ISC LGPL-3+ MIT MPL-2.0 Unicode-DFS-2016 Unlicense ZLIB"
+LICENSE+=" 0BSD Apache-2.0-with-LLVM-exceptions BSD BSD-2 Boost-1.0 ISC LGPL-3+ MIT MPL-2.0 Unicode-DFS-2016 Unlicense ZLIB"
 SLOT="0"
 RESTRICT="mirror"
 

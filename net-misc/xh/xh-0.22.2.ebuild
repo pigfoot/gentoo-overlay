@@ -108,7 +108,7 @@ if [[ ${PV} != *9999 ]]; then
 	js-sys@0.3.69
 	jsonxf@1.1.1
 	lazy_static@1.4.0
-	libc@0.2.154
+	libc@0.2.153
 	libredox@0.1.3
 	line-wrap@0.2.0
 	linked-hash-map@0.5.6

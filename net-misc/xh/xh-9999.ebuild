@@ -1,4 +1,4 @@
-# Copyright 2024 Gentoo Authors
+# Copyright 2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -7,7 +7,7 @@ if [[ ${PV} != *9999 ]]; then
 	CRATES=""
 fi
 
-inherit cargo
+inherit cargo shell-completion
 
 DESCRIPTION="Friendly and fast tool for sending HTTP requests"
 HOMEPAGE="https://github.com/ducaale/xh"
@@ -28,7 +28,7 @@ fi
 
 LICENSE="MIT"
 # Dependent crate licenses
-LICENSE+=" 0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD Boost-1.0 ISC MPL-2.0 Unicode-DFS-2016 Unlicense ZLIB"
+LICENSE+=" Apache-2.0 BSD ISC MIT MPL-2.0 Unicode-3.0"
 SLOT="0"
 RESTRICT="mirror"
 IUSE="+rustls"
@@ -47,6 +47,8 @@ src_unpack() {
 src_configure() {
     myfeatures=(
         $(usex rustls rustls native-tls)
+        online-tests
+        network-interface
     )
 
     cargo_src_configure --no-default-features
@@ -58,6 +60,12 @@ src_compile() {
 
 src_install() {
     cargo_src_install --bin=${PN}
+
+    doman doc/xh.1
+
+    [[ -r completions/${PN}.bash ]] && dobashcomp completions/${PN}.bash
+    [[ -r completions/${PN}.fish ]] && dofishcomp completions/${PN}.fish
+    [[ -r completions/_${PN} ]]     && newzshcomp completions/_${PN} ${PN}
 
     dosym /usr/bin/"${PN}" /usr/bin/"${PN}s"
 }

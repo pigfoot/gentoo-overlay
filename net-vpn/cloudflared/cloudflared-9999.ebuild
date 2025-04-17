@@ -65,15 +65,23 @@ src_install() {
     keepdir /etc/cloudflared
 
     if [[ ! -e "${TOKEN_FILE}" ]]; then
-		echo ""
-        read -r -n 1 -p "Token file doesn't exit. Would you like to input now? (y/n) " yn
+        einfo
+        elog "You might want to run to update token:"
+        elog "  \"emerge --config =${CATEGORY}/${PF}\""
+        elog "if this is a new install."
+        einfo
+    fi
+}
 
-        if [[ $yn == [Yy] ]]; then
-            read -r -p "Paste token here: " token
-            cat <<-EOF > ${TOKEN_FILE}
+pkg_config() {
+    echo ""
+    read -r -n 1 -p "Token file doesn't exit. Would you like to input now? (y/n) " yn
+
+    if [[ $yn == [Yy] ]]; then
+		read -r -p "Paste token here: " token
+		cat <<-EOF > ${TOKEN_FILE}
 			${token}
-			EOF
-			echo "Toekn has been saved into ${TOKEN_FILE}."
-        fi
+		EOF
+        echo "Token has been saved into ${TOKEN_FILE}."
     fi
 }

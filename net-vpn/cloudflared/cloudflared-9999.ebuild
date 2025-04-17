@@ -67,7 +67,7 @@ src_install() {
     if [[ ! -e "${TOKEN_FILE}" ]]; then
         einfo
         elog "You might want to run to update token:"
-        elog "  \"emerge --config =${CATEGORY}/${PF}\""
+        elog "  emerge --config \"=${CATEGORY}/${PF}\""
         elog "if this is a new install."
         einfo
     fi

@@ -62,9 +62,9 @@ src_install() {
     newconfd "${FILESDIR}"/cloudflared.confd cloudflared
     systemd_dounit "${FILESDIR}"/cloudflared.service
 
-    dodir /etc/cloudflared
+    keepdir /etc/cloudflared
     if [[ ! -f "${TOKEN_FILE}" ]]; then
         einfo "token file doesn't exit, please do:"
-        einfo "cat <<'EOF' > ${TOKEN_FILE}"
+        eerror "cat <<'EOF' > ${TOKEN_FILE}"
     fi
 }

@@ -65,9 +65,9 @@ src_install() {
     keepdir /etc/cloudflared
 }
 
-pkg_postinst() {
+pkg_config() {
     if [[ ! -e "${TOKEN_FILE}" ]]; then
-        echo
+		einfo ""
         read -r -n 1 -p "Token file doesn't exit. Would you like to input now? (y/n) " yn
 
         if [[ $yn == [Yy] ]]; then

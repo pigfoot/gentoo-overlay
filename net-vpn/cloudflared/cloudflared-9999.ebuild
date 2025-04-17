@@ -63,11 +63,9 @@ src_install() {
     systemd_dounit "${FILESDIR}"/cloudflared.service
 
     keepdir /etc/cloudflared
-}
 
-pkg_config() {
     if [[ ! -e "${TOKEN_FILE}" ]]; then
-		einfo ""
+		echo ""
         read -r -n 1 -p "Token file doesn't exit. Would you like to input now? (y/n) " yn
 
         if [[ $yn == [Yy] ]]; then

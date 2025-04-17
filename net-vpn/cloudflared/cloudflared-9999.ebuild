@@ -78,6 +78,7 @@ src_install() {
         if [[ $yn == [Yy] ]]; then
             read -r -p "Paste token here: " token
             echo "${token}" > ${TOKEN_FILE}
+			echo "Toekn has been saved into ${TOKEN_FILE}."
         fi
     fi
 }

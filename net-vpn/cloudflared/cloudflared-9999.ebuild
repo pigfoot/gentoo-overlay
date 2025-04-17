@@ -63,21 +63,18 @@ src_install() {
     systemd_dounit "${FILESDIR}"/cloudflared.service
 
     keepdir /etc/cloudflared
+}
+
+pkg_postinst() {
     if [[ ! -e "${TOKEN_FILE}" ]]; then
         echo
-        while true; do
-            read -r -n 1 -p "Token file doesn't exit. Would you like to input now? (y/n) " yn
-            case $yn in
-                [Yy]) break;;
-                [Nn]) break;;
-                *) echo -e "\nPlease answer Yes or No.";;
-            esac
-        done
-        echo
+        read -r -n 1 -p "Token file doesn't exit. Would you like to input now? (y/n) " yn
 
         if [[ $yn == [Yy] ]]; then
             read -r -p "Paste token here: " token
-            echo "${token}" > ${TOKEN_FILE}
+            cat <<-EOF > ${TOKEN_FILE}
+			${token}
+			EOF
 			echo "Toekn has been saved into ${TOKEN_FILE}."
         fi
     fi

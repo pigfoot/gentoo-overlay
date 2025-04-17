@@ -37,6 +37,8 @@ SLOT="0/${PVR}"
 RESTRICT="mirror"
 IUSE="+pie"
 
+TOKEN_FILE=/etc/cloudflared/token.txt
+
 src_compile() {
     # -buildmode=pie forces external linking mode, even CGO_ENABLED=0
     # https://github.com/golang/go/issues/18968
@@ -56,9 +58,13 @@ src_compile() {
 src_install() {
     dobin bin/*
 
-    insinto /etc/cloudflared
-    doins "${FILESDIR}"/config.yml
     newinitd "${FILESDIR}"/cloudflared.initd cloudflared
     newconfd "${FILESDIR}"/cloudflared.confd cloudflared
     systemd_dounit "${FILESDIR}"/cloudflared.service
+
+    dodir /etc/cloudflared
+    if [[ ! -f "${TOKEN_FILE}" ]]; then
+        einfo "token file doesn't exit, please do:"
+        einfo "cat <<'EOF' > ${TOKEN_FILE}"
+    fi
 }

@@ -78,6 +78,7 @@ pkg_config() {
     read -r -n 1 -p "Token file doesn't exit. Would you like to input now? (y/n) " yn
 
     if [[ $yn == [Yy] ]]; then
+		echo
 		read -r -p "Paste token here: " token
 		cat <<-EOF > ${TOKEN_FILE}
 			${token}

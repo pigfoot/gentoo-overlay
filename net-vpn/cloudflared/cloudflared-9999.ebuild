@@ -64,7 +64,7 @@ src_install() {
 
     keepdir /etc/cloudflared
     if [[ ! -f "${TOKEN_FILE}" ]]; then
-        einfo "token file doesn't exit, please do:"
-        eerror "cat <<'EOF' > ${TOKEN_FILE}"
+        eerror "\nToken file doesn't exit, please do:"
+        eerror "cat <<'EOF' > ${TOKEN_FILE}\n"
     fi
 }

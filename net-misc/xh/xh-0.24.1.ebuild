@@ -95,7 +95,7 @@ if [[ ${PV} != *9999 ]]; then
 	http@1.2.0
 	httparse@1.10.0
 	httpdate@1.0.3
-	humantime@2.1.0
+	humantime@2.2.0
 	hyper-rustls@0.27.5
 	hyper-tls@0.6.0
 	hyper-util@0.1.10
@@ -190,12 +190,13 @@ if [[ ${PV} != *9999 ]]; then
 	rustls-native-certs@0.8.1
 	rustls-pemfile@2.2.0
 	rustls-pki-types@1.11.0
-	rustls-webpki@0.102.8
-	rustls@0.23.23
+	rustls-webpki@0.103.0
+	rustls@0.23.25
 	rustversion@1.0.19
 	ruzstd@0.7.3
 	ryu@1.0.19
 	same-file@1.0.6
+	sanitize-filename@0.6.0
 	schannel@0.1.27
 	security-framework-sys@2.14.0
 	security-framework@2.11.1

@@ -18,7 +18,7 @@ if [[ ${PV} == *9999* ]]; then
     }
 else
     EGO_VER="${PV}"
-    SRC_URI="https://${EGO_PN}/archive/${EGO_VER}.tar.gz -> ${P}.tar.gz"
+    #SRC_URI="https://${EGO_PN}/archive/${EGO_VER}.tar.gz -> ${P}.tar.gz"
     inherit git-r3
     EGIT_REPO_URI="https://${EGO_PN}.git"
     EGIT_COMMIT="${EGO_VER}"
